@@ -1,52 +1,34 @@
-// main.js - Hauptdatei für die Bibliotheksverwaltung
+import express from "express";
+import logging from "logging";
 
-const express = require("express");
-const cors = require("cors");
-const bodyParser = require("body-parser");
-const { v4: uuidv4 } = require("uuid");
+import datenbankObjekt  from "./datenbank.js";
+import controllerArray  from "./controller/index.js";
+import middlewareArray  from "./middleware/allgemein.middleware.js";
+
+
+const logger = logging.default("main");
 
 const app = express();
-const PORT = process.env.PORT || 3002;
 
-app.use(cors());
-app.use(bodyParser.json());
+await datenbankObjekt.initialisieren();
 
-let books = [];
-let members = [];
 
-// --- Bücher Endpunkte ---
+app.use( express.json() );
+app.use( express.static("public") );
+app.use( middlewareArray );
 
-// Buch erstellen
-app.post("/books", (req, res) => {
-    const book = { id: uuidv4(), ...req.body };
-    books.push(book);
-    res.status(201).json(book);
-});
 
-// Alle Bücher abrufen
-app.get("/books", (req, res) => {
-    res.json(books);
-});
+// Default-Funktion zum Registrieren von Routen für
+// alle Controller aufrufen
+let anzahlRestEndpunkte = 0;
+for (const controller of controllerArray) {
 
-// Buch löschen
-app.delete("/books/:id", (req, res) => {
-    books = books.filter(book => book.id !== req.params.id);
-    res.status(204).send();
-});
-
-// --- Mitglieder Endpunkte ---
-
-// Mitglied hinzufügen
-app.post("/members", (req, res) => {
-    const member = { id: uuidv4(), ...req.body };
-    members.push(member);
-    res.status(201).json(member);
-});
-
-// Alle Mitglieder abrufen
-app.get("/members", (req, res) => {
-    res.json(members);
-});
+    anzahlRestEndpunkte += controller(app);
+}
+logger.info(`Anzahl registrierter REST-Endpunkte: ${anzahlRestEndpunkte}\n`);
 
 // Server starten
-app.listen(PORT, () => console.log(`Bibliotheksverwaltung läuft auf Port ${PORT}`));
+const PORT_NUMMER = 8080;
+app.listen( PORT_NUMMER,
+    () => { logger.info(`Web-Server lauscht auf Port ${PORT_NUMMER}.\n`); }
+  );

@@ -1,0 +1,16 @@
+body {
+    font-family: sans-serif;
+    padding: 1em;
+}
+
+h1 {
+    margin-bottom: 1.5em;
+}
+
+ul li {
+    margin-bottom: 20px;
+}
+
+.fett {
+    font-weight: bold;
+}
