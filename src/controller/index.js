@@ -1,6 +1,6 @@
 
 // Default-Importe nutzen, also keine {}-Klammern um Bezeichner nach `import`
-import studiengangcontroller from './sg.controller.js';
+import buchcontroller from './buch.controller.js';
 import studicontroller       from './studi.controller.js';
 
 /**
@@ -9,6 +9,6 @@ import studicontroller       from './studi.controller.js';
  * nicht geändert werden muss.
  */
 export default [
-    studiengangcontroller,
+    buchcontroller,
     studicontroller
 ];
