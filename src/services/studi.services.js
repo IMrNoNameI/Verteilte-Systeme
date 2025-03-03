@@ -1,6 +1,6 @@
 import logging         from "logging";
 import datenbankObjekt from "../datenbank.js";
-import sgService       from "./sg.service.js";
+import buchService       from "./buch.services.js";
 
 
 const logger = logging.default("studi-service");
@@ -115,7 +115,7 @@ async function neu(studiObjekt) {
     // check if studiengang ist existing
     const sgKurz = studiObjekt.studiengang;
 
-    const sgObjekt = sgService.getByKurzname(sgKurz);
+    const sgObjekt = buchService.getBybuchID(sgKurz);
     if (!sgObjekt) {
 
         return `Studi mit unbekanntem Studiengang "${sgKurz}" kann nicht angelegt werden.`;
@@ -154,7 +154,7 @@ async function aendern(matrikelnr, deltaObjekt) {
 
     if (deltaObjekt.studiengang) {
 
-        const sgObjekt = sgService.getByKurzname(deltaObjekt.studiengang);
+        const sgObjekt = buchService.getBybuchID(deltaObjekt.studiengang);
         if (!sgObjekt) {
 
             logger.warn(`Ändern fehlgeschlagen, Studiengang "${deltaObjekt.studiengang}" existiert nicht.`);

@@ -1,0 +1,67 @@
+{
+  "buecher": [
+    {
+      "buchID": 18700,
+      "titel": "Connie liebt lesen",
+      "autor": "Jules Verne"
+    },
+    {
+      "buchID": 234567,
+      "titel": "Davids Traum vom großen Klau",
+      "autor": "Jules Verne",
+      "verfuegbar": false
+    }
+  ],
+  "studiengaenge": [
+    {
+      "kurz": "BWL",
+      "lang": "Betriebswirtschaftslehre"
+    },
+    {
+      "kurz": "WING",
+      "lang": "Wirtschaftsingenieurwesen"
+    },
+    {
+      "kurz": "WINF",
+      "lang": "Wirtschaftsinformatik"
+    },
+    {
+      "kurz": "INFO",
+      "lang": "Informatik"
+    },
+    {
+      "kurz": "IWMM",
+      "lang": "Irgendwas mit Medien"
+    },
+    {
+      "kurz": "VWL",
+      "lang": "Volkswirtschaftslehre"
+    },
+    {
+      "kurz": "BW",
+      "lang": "Brauereiwesen"
+    },
+    {
+      "kurz": "WBÖ",
+      "lang": "Weinbau und Önologie"
+    },
+    {
+      "kurz": "LUD",
+      "lang": "Ludologie"
+    }
+  ],
+  "studis": [
+    {
+      "matrikelnr": 123456,
+      "vorname": "Hans",
+      "nachname": "Wiwi",
+      "studiengang": "BWL"
+    },
+    {
+      "matrikelnr": 234567,
+      "vorname": "Nina",
+      "nachname": "Info",
+      "studiengang": "INFO"
+    }
+  ]
+}

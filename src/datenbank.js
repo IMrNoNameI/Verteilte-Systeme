@@ -9,6 +9,20 @@ const dbDateiName = "db.json"; // diese Datei in .gitignore und Ingore-Liste fü
 // Anfangsdaten, wenn die Datenbank-Datei nicht existiert
 const anfangsDaten =  {
 
+"buecher": [
+        {
+            "buchID": 123456,
+            "titel": "Connie hat Bierschiss",
+            "autor": "Petra D. Waix",
+            "verfuegbar": true
+        },{
+            "buchID": 234567,
+            "titel": "Davids Traum vom großen Klau",
+            "autor": "Jules Verne",
+            "verfuegbar": false
+        }
+    ],
+
     "studiengaenge": [
        {
         "kurz": "BWL",
@@ -84,19 +98,19 @@ async function initialisieren() {
 
 
 /**
- * Alle Studiengänge von Datenbank holen.
+ * Alle Bücher von Datenbank holen.
  *
- * @returns Array mit allen Studiengängen;
+ * @returns Array mit allen Büchern;
  *          wird nicht `null` oder `undefined` sein;
- *          alphabetisch sortiert nach `kurz`.
+ *          alphabetisch sortiert nach `titel`.
  */
-function studiengangGetAlle() {
+function buchGetAlle() {
 
-    if (datenbank.data && datenbank.data.studiengaenge) {
+    if (datenbank.data && datenbank.data.buecher) {
 
-        const sortFkt = (a, b) => a.kurz.localeCompare(b.kurz)
+        const sortFkt = (a, b) => a.titel.localeCompare(b.titel)
 
-        return datenbank.data.studiengaenge.sort( sortFkt );
+        return datenbank.data.buecher.sort( sortFkt );
 
     } else {
 
@@ -106,20 +120,19 @@ function studiengangGetAlle() {
 
 
 /**
- * Neuen Studiengang anlegen. Es muss sichergestellt sein,
- * dass es nur keinen Studiengang mit dem gleichen Kurznamen
- * gibt!
+ * Neues Buch anlegen. Es muss sichergestellt sein,
+ * dass es nur ein Buch mit der gleichen ID gibt!
  *
- * @param {*} sgObjekt Objekt mit neuem Studiengang, muss
- *            die Attribute `kurz` und `lang` enthalten.
+ * @param {*} buchObjekt Objekt mit neuem Buch, muss
+    *            die Attribute `ID`, `Titel`, `Autor` und `verfügbar` enthalten.
  */
-async function studiengangNeu(sgObjekt) {
+async function buchNeu(buchObjekt) {
 
-    datenbank.data.studiengaenge.push(sgObjekt)
+    datenbank.data.buecher.push(buchObjekt)
     await datenbank.write();
 
-    logger.info(`Anzahl Studiengänge nach Anlegen neuer Studiengang "${sgObjekt.kurz}": ` +
-                `${datenbank.data.studiengaenge.length}`);
+    logger.info(`Anzahl Bücher nach Anlegen von neuem Buch "${buchObjekt.buchID}": ` +
+                `${datenbank.data.buecher.length}`);
 }
 
 
@@ -128,39 +141,56 @@ async function studiengangNeu(sgObjekt) {
  * werden, wenn vorher sichergestellt wurde, dass es einen Studiengang mit dem
  * Kurznamen gibt.
  *
- * @param {*} kurzname Kurzname (Schlüssel) des Studiengangs, für den der Langname
+ * @param {*} buchID ID (Schlüssel) des Buchs, für die das Buchobjekt
  *                     geändert werden soll.
  *
- * @param {*} langname Neuer Langname, der für den Studiengang gespeichert werden soll.
+ * @param {*} buchObjekt Neues Buchobjekt, dass für das Buch gespeichert werden soll.
  *
- * @return {object} Geändertes Studiengang-Objekt oder leeres Objekt, wenn kein
- *                  Studiengang mit dem Kurznamen gefunden wurde.
+ * @return {object} Geändertes Buch-Objekt oder leeres Objekt, wenn kein
+ *                  Buch mit der ID gefunden wurde.
  */
-async function studiengangLangnameAendern(kurzname, langname) {
+async function buchAendern(buchID, buchObjekt) {
 
-    const studiengang = datenbank.data.studiengaenge.find( (sg) => sg.kurz === kurzname );
+    const buch = datenbank.data.buecher.find( (buch) => buch.buchID === buchID );
 
-    if (studiengang) {
+    if (buch) {
 
-        studiengang.lang = langname;
+        buch.titel = buchObjekt.titel;
+        buch.autor = buchObjekt.autor;
+        buch.verfuegbar = buchObjekt.verfuegbar;
         await datenbank.write();
 
-        logger.info(`Langname von Studiengang "${kurzname}" geändert: ${langname}`);
+        logger.info(`Werte von Buch "${buchID}" geändert: ${buchObjekt.titel}`);
 
-        return studiengang;
+        return buch;
 
     } else {
 
-        logger.error(`INTERNER FEHLER: Kein Studiengang mit Kurzname "${kurzname}" gefunden.`);
+        logger.error(`INTERNER FEHLER: Kein Buch mit ID "${buchID}" gefunden.`);
         return {};
     }
+    
+}
+/**
+ * Bücher anhand ID löschen.
+ *
+ * @param {*} buchID ID von zu löschenden Buch.
+ */
+async function buchLoeschen(buchID)  {
+
+    const filterFkt = (buch) => buch.buchID !== buchID;
+
+    datenbank.data.buecher = datenbank.data.buecher.filter( filterFkt );
+
+    await datenbank.write();
+
+    logger.info(`Anzahl Bücher nach Löschen: ${datenbank.data.buecher.length}`);
 }
 
-
-// ****** ab jetzt die Funktionen für die Studi-Datensätze ******
+// ****** ab jetzt die Funktionen für die Mitglieder-Datensätze ******
 
 /**
- * Alle Studierenden von Datenbank holen.
+ * Alle Mitglieder von Datenbank holen.
  *
  * @returns Array mit allen Studierenden, sortiert nach aufsteigenden
  *          Matrikelnummer; wird nicht `null` oder `undefined` sein.
@@ -276,7 +306,7 @@ export default {
 
     initialisieren,
 
-    studiengangGetAlle, studiengangNeu, studiengangLangnameAendern,
+    buchGetAlle, buchNeu, buchAendern, buchLoeschen,
 
     studiGetAlle, studiNeu, studiLoeschen, studiAendern
 };

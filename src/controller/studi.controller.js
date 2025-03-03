@@ -2,7 +2,7 @@ import logging from "logging";
 
 import { API_PREFIX } from "./konstanten.js";
 
-import studiService from "../services/studi.service.js";
+import studiService from "../services/studi.services.js";
 import { CUSTOM_HEADER_ANZAHL, CUSTOM_HEADER_FEHLER } from "./konstanten.js";
 import { HTTP_STATUS_CODES } from "./konstanten.js";
 
