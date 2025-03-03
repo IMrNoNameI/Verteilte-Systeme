@@ -27,8 +27,8 @@ function getAlle() {
  * Volltextsuche Bücher.
  * Die Suche ist case-insensitive.
  *
- * @param {*} suchString Such-String, wird auf Kurz- und
- *                       Lang-Bezeichnung angewendet.
+ * @param {*} suchString Such-String, wird auf
+ *                       titel-Bezeichnung angewendet.
  *
  * @returns Array mit Buchobjekten; kann leer sein,
  *          aber nicht `null` oder `undefined`.

@@ -2,16 +2,16 @@ import logging from "logging";
 
 import { API_PREFIX } from "./konstanten.js";
 
-import studiService from "../services/studi.services.js";
+import studiService from "../services/mietglied.services.js";
 import { CUSTOM_HEADER_ANZAHL, CUSTOM_HEADER_FEHLER } from "./konstanten.js";
 import { HTTP_STATUS_CODES } from "./konstanten.js";
 
-const logger = logging.default("studi-controller");
+const logger = logging.default("mitglied-controller");
 
 
 /**
- * Routen für einzelne REST-Endpunkte für den Entity-Typ `studi`
- * (Student/Studientin) registrieren.
+ * Routen für einzelne REST-Endpunkte für den Entity-Typ `mitglied`
+ * (Mitglied) registrieren.
  *
  * Diese Funktion ist der Default-Export des Moduls, weil es
  * sich hierbei um die einzige Methode handelt, die von außen
@@ -23,11 +23,11 @@ const logger = logging.default("studi-controller");
  */
 export default function routenRegistrieren(app) {
 
-    const entityTyp = "studi"; // "sg" für "Studiengang"
+    const entityTyp = "mitglied"; // "mitglied" für "Mitglied"
 
     const prefixFuerRouten = `${API_PREFIX}/${entityTyp}`;
 
-    const routeRessource  = `${prefixFuerRouten}/:matrikelnr`;
+    const routeRessource  = `${prefixFuerRouten}/:mitgliedID`;
     const routeCollection = `${prefixFuerRouten}/`;
 
     let anzahlRestEndpunkte = 0;
@@ -53,7 +53,7 @@ export default function routenRegistrieren(app) {
     anzahlRestEndpunkte++;
 
     // HTTP-PUT wird nicht implementiert, weil es nicht sinnvoll ist,
-    // einfach ein ganzes Studi-Objekt zu ersetzen.
+    // einfach ein ganzes Mitglied-Objekt zu ersetzen.
 
     return anzahlRestEndpunkte;
 };
@@ -64,26 +64,26 @@ export default function routenRegistrieren(app) {
 
 
 /**
- * Funktion HTTP-GET-Request auf eine Ressource mit Matrikelnr
+ * Funktion HTTP-GET-Request auf eine Ressource mit mitgliedID
  * als Pfadparameter
  */
 function getResource(req, res) {
 
-    const matrikenrStr = req.params.matrikelnr;
+    const mitgliedID = req.params.mitgliedID;
 
-    // versuche, die matrikelnummer zu parsen
-    let matrikelnrInt = parseInt(matrikenrStr);
+    // versuche, die mitgliedID zu parsen
+    let mitgliedIDInt = parseInt(mitgliedID);
 
-    if ( isNaN(matrikelnrInt) ) {
+    if ( isNaN(mitgliedIDInt) ) {
 
-        logger.error(`Pfadparameterwert "${matrikenrStr}" konnte nicht nach Int geparst werden.`);
-        res.setHeader(CUSTOM_HEADER_FEHLER, "Matrikelnummer muss eine Zahl sein.");
+        logger.error(`Pfadparameterwert "${mitgliedID}" konnte nicht nach Int geparst werden.`);
+        res.setHeader(CUSTOM_HEADER_FEHLER, "MitgliedID muss eine Zahl sein.");
         res.status(HTTP_STATUS_CODES.BAD_REQUEST_400);
         res.json({});
         return;
     }
 
-    const ergebnisObjekt = studiService.getByMatrikelnr(matrikelnrInt);
+    const ergebnisObjekt = mitgliedService.getBymitgliedID(mitgliedIDInt);
 
     if(ergebnisObjekt) {
 
@@ -99,7 +99,7 @@ function getResource(req, res) {
 
 
 /**
- * Funktion für GET-Request auf Studi-Collection.
+ * Funktion für GET-Request auf Mitglied-Collection.
  * Kann Such-Parameter `q` auswerten.
  */
 function getCollection(req, res) {
@@ -109,11 +109,11 @@ function getCollection(req, res) {
     const suchString = req.query.q;
     if (suchString) {
 
-        ergebnisArray = studiService.suche(suchString);
+        ergebnisArray = mitgliedService.suche(suchString);
 
     } else {
 
-        ergebnisArray = studiService.getAlle();
+        ergebnisArray = mitgliedService.getAlle();
     }
 
     const anzahl = ergebnisArray.length;
@@ -133,18 +133,18 @@ function getCollection(req, res) {
 }
 
 /**
- * Neuen Studi anlegen.
+ * Neues Mitglied anlegen.
  */
 async function postCollection(req, res) {
 
-    const matrikelnr  = req.body.matrikelnr;
+    const mitgliedID  = req.body.mitgliedID;
     const vorname     = req.body.vorname;
     const nachname    = req.body.nachname;
-    const studiengang = req.body.studiengang;
+    const adresse     = req.body.adresse;
 
-    if (matrikelnr === undefined) {
+    if (mitgliedID === undefined) {
 
-        res.setHeader(CUSTOM_HEADER_FEHLER, "Attribut 'matrikelnr' fehlt.");
+        res.setHeader(CUSTOM_HEADER_FEHLER, "Attribut 'mitgliedID' fehlt.");
         res.status( HTTP_STATUS_CODES.BAD_REQUEST_400 );
         res.json( {} );
         return;
@@ -163,9 +163,9 @@ async function postCollection(req, res) {
         res.json( {} );
         return;
     }
-    if (studiengang === undefined || studiengang.trim() === "" ) {
+    if (adresse === undefined || adresse.trim() === "" ) {
 
-        res.setHeader(CUSTOM_HEADER_FEHLER, "Attribut 'studiengang' fehlt oder ist leer");
+        res.setHeader(CUSTOM_HEADER_FEHLER, "Attribut 'adresse' fehlt oder ist leer");
         res.status( HTTP_STATUS_CODES.BAD_REQUEST_400 );
         res.json( {} );
         return;
@@ -173,20 +173,20 @@ async function postCollection(req, res) {
 
     // In neues Objekt umwandeln, damit evtl. überflüssige Attribute
     // entfernt werden; außerdem werden die Werte normalisiert.
-    const neuerStudi = {
+    const neuesMitglied = {
 
-        matrikelnr : matrikelnr,
+        mitgliedID : mitgliedID,
         vorname    : vorname.trim(),
         nachname   : nachname.trim(),
-        studiengang: studiengang.trim().toUpperCase()
+        adresse    : adresse.trim(),
     };
 
-    const fehlerMeldung = await studiService.neu(neuerStudi);
+    const fehlerMeldung = await mitgliedService.neu(neuesMitglied);
 
     if (fehlerMeldung === "") {
 
         res.status( HTTP_STATUS_CODES.CREATED_201 );
-        res.json( neuerStudi );
+        res.json( neuesMitglied );
 
     } else {
 
@@ -198,25 +198,25 @@ async function postCollection(req, res) {
 
 
 /**
- * Funktion für HTTP-DELETE zu Studi-Ressource, also um Studi zu löschen.
+ * Funktion für HTTP-DELETE zu mitglied-Ressource, also um Mitglied zu löschen.
  */
 async function deleteResource(req, res) {
 
-    const matrikenrStr = req.params.matrikelnr;
+    const mitgliedID = req.params.mitgliedID;
 
     // versuche, die matrikelnummer zu parsen
-    let matrikelnrInt = parseInt(matrikenrStr);
+    let mitgliedIDInt = parseInt(mitgliedID);
 
-    if ( isNaN(matrikelnrInt) ) {
+    if ( isNaN(mitgliedIDInt) ) {
 
-        logger.error(`Pfadparameterwert "${matrikenrStr}" konnte nicht nach Int geparst werden.`);
-        res.setHeader(CUSTOM_HEADER_FEHLER, "Matrikelnummer muss eine ganze Zahl (Integer) sein.");
+        logger.error(`Pfadparameterwert "${mitgliedID}" konnte nicht nach Int geparst werden.`);
+        res.setHeader(CUSTOM_HEADER_FEHLER, "MitgliedID muss eine ganze Zahl (Integer) sein.");
         res.status(HTTP_STATUS_CODES.BAD_REQUEST_400);
         res.json( {} );
         return;
     }
 
-    const erfolgreich = await studiService.loeschen(matrikelnrInt);
+    const erfolgreich = await mitgliedService.mitgliedLoeschen(mitgliedIDInt);
 
     if (erfolgreich) {
 
@@ -226,7 +226,7 @@ async function deleteResource(req, res) {
     } else {
 
         res.setHeader(CUSTOM_HEADER_FEHLER,
-                      `Löschen fehlgeschlagen, kein Studi mit dieser Matrikelnummer ${matrikelnrInt} gefunden.`);
+                      `Löschen fehlgeschlagen, kein Mitglied mit dieser MitgliedID ${mitgliedIDInt} gefunden.`);
         res.status( HTTP_STATUS_CODES.NOT_FOUND_404 );
         res.json( {} );
     }
@@ -234,22 +234,22 @@ async function deleteResource(req, res) {
 
 
 /**
- * Einzelne Felder einer Studi-Ressource ändern.
+ * Einzelne Felder einer Mitglied-Ressource ändern.
  * Im JSON-Body muss mindestens ein neuer Wert für eines
  * der folgenden Attribute enthalten sein:
- * `vorname`, `nachname`, `studiengang`.
+ * `vorname`, `nachname`, `adresse`.
  */
 async function patchResource(req, res) {
 
-    const matrikenrStr = req.params.matrikelnr;
+    const mitgliedID = req.params.mitgliedID;
 
     // versuche, die matrikelnummer zu parsen
-    let matrikelnrInt = parseInt(matrikenrStr);
+    let mitgliedIDInt = parseInt(mitgliedID);
 
-    if ( isNaN(matrikelnrInt) ) {
+    if ( isNaN(mitgliedIDInt) ) {
 
-        logger.error(`Pfadparameterwert "${matrikenrStr}" konnte nicht nach Int geparst werden.`);
-        res.setHeader(CUSTOM_HEADER_FEHLER, "Matrikelnummer muss eine ganze Zahl (Integer) sein.");
+        logger.error(`Pfadparameterwert "${mitgliedID}" konnte nicht nach Int geparst werden.`);
+        res.setHeader(CUSTOM_HEADER_FEHLER, "MitgliedID muss eine ganze Zahl (Integer) sein.");
         res.status(HTTP_STATUS_CODES.BAD_REQUEST_400);
         res.json( {} );
         return;
@@ -257,7 +257,7 @@ async function patchResource(req, res) {
 
     const vorname     = req.body.vorname;
     const nachname    = req.body.nachname;
-    const studiengang = req.body.studiengang;
+    const adresse     = req.body.adresse;
 
     const deltaObjekt = {};
 
@@ -272,10 +272,10 @@ async function patchResource(req, res) {
         einAttributGeaendert = true;
         deltaObjekt.nachname = nachname.trim();
     }
-    if (studiengang && studiengang.trim().length > 0 ) {
+    if (adresse && adresse.trim().length > 0 ) {
 
         einAttributGeaendert = true;
-        deltaObjekt.studiengang = studiengang.trim().toUpperCase();
+        deltaObjekt.adresse = adresse.trim();
     }
     if (einAttributGeaendert === false) {
 
@@ -287,7 +287,7 @@ async function patchResource(req, res) {
     }
 
 
-    const ergebnisObjekt = await studiService.aendern(matrikelnrInt, deltaObjekt);
+    const ergebnisObjekt = await mitgliedService.mitgliedAendern(mitgliedIDInt, deltaObjekt);
 
     if (ergebnisObjekt.fehler) {
 

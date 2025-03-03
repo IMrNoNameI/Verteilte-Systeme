@@ -3,26 +3,26 @@ import datenbankObjekt from "../datenbank.js";
 import buchService       from "./buch.services.js";
 
 
-const logger = logging.default("studi-service");
+const logger = logging.default("mitglied-service");
 
 
 /**
- * Alle Studis zurückgeben.
+ * Alle Mitglieder zurückgeben.
  *
- * @returns Array mit allen Studis; kann leer sein,
+ * @returns Array mit allen Mitgliedern; kann leer sein,
  *          aber nicht `null` oder `undefined`.
  */
 function getAlle() {
 
-    const ergArray = datenbankObjekt.studiGetAlle();
+    const ergArray = datenbankObjekt.mitgliedGetAlle();
 
     if (ergArray.length > 0) {
 
-        logger.info(`Alle ${ergArray.length} Studis ausgelesen.` );
+        logger.info(`Alle ${ergArray.length} Mitglieder ausgelesen.` );
 
     } else {
 
-        logger.warn("Keine Studis in der Datenbank.");
+        logger.warn("Keine Mitglieder in der Datenbank.");
     }
 
     return ergArray;
@@ -30,31 +30,31 @@ function getAlle() {
 
 
 /**
- * Sucht nach Studis anhand Such-String in Vor- oder Nachname.
+ * Sucht nach Mitglieder anhand Such-String in Vor- oder Nachname.
  * Die Suche ist case-insensitive.
  *
  * @param {*} suchString Such-String, wird auf Vor- und Nachname angewendet.
  *
- * @return Array mit Studis; kann leer sein, aber nicht `null` oder `undefined`.
+ * @return Array mit Mitgliedern; kann leer sein, aber nicht `null` oder `undefined`.
  */
 function suche(suchString) {
 
-    const alleArray = datenbankObjekt.studiGetAlle();
+    const alleArray = datenbankObjekt.mitgliedGetAlle();
 
     if (alleArray.length === 0) {
 
-        logger.warn("Keine Studis in der Datenbank.");
+        logger.warn("Keine Mitglieder in der Datenbank.");
         return [];
     }
 
     const suchStringLowerCase = suchString.toLowerCase();
 
     const teilmengeArray =  alleArray.filter(
-        (studi) => studi.vorname.toLowerCase( ).includes( suchStringLowerCase ) ||
-                   studi.nachname.toLowerCase().includes( suchStringLowerCase )
+        (mitglied) => mitglied.vorname.toLowerCase( ).includes( suchStringLowerCase ) ||
+                   mitglied.nachname.toLowerCase().includes( suchStringLowerCase )
     );
 
-    logger.info(`Anzahl gefundener Studis für Such-String "${suchString}": ` +
+    logger.info(`Anzahl gefundener Mitglieder für Such-String "${suchString}": ` +
                  teilmengeArray.length);
 
     return teilmengeArray;
@@ -62,80 +62,80 @@ function suche(suchString) {
 
 
 /**
- * Suche nach Studi anhand Matrikelnummer.
+ * Suche nach Mitglied anhand MitgliedID.
  *
- * @param {nuber} matrikelnr Matrikelnummer (Integer).
+ * @param {number} mitgliedID MitgliedID (Integer).
  *
- * @returns Studi-Objekt oder `null`, wenn nicht gefunden.
+ * @returns Mitglied-Objekt oder `null`, wenn nicht gefunden.
  */
-function getByMatrikelnr(matrikelnr) {
+function getByMitgliedID(mitgliedID) {
 
-    const alleArray = datenbankObjekt.studiGetAlle();
+    const alleArray = datenbankObjekt.mitgliedGetAlle();
 
-    const foundStudi = alleArray.find(studi => studi.matrikelnr === matrikelnr);
+    const foundMitglied = alleArray.find(mitglied => mitglied.mitgliedID === mitgliedID);
 
-    if (foundStudi) {
+    if (foundMitglied) {
 
-        logger.info(`Studi mit Matrikelnr "${matrikelnr}" gefunden: `+
-                    `${foundStudi.vorname} ${foundStudi.nachname}`);
-        return foundStudi;
+        logger.info(`Studi mit MitgliedID "${mitgliedID}" gefunden: `+
+                    `${foundMitglied.vorname} ${foundMitglied.nachname}`);
+        return foundMitglied;
 
     } else {
 
-        logger.info(`Kein Studi mit Matrikelnr "${matrikelnr}" gefunden.`);
+        logger.info(`Kein Mitglied mit MitgliedID "${mitgliedID}" gefunden.`);
         return null;
     }
 }
 
 
 /**
- * Neuen Studi anlegen. Es muss sichergestellt sein, dass `studiObjekt`
- * die Attribute `matrikelnr`, `vorname`, `nachname` sowie `studiengang`
+ * Neues Mitglied anlegen. Es muss sichergestellt sein, dass `mitgliedObjekt`
+ * die Attribute `mitgliedID`, `vorname`, `nachname` sowie `adresse`
  * enthält.
  *
  * @return String mit Fehlermeldung; ist leer, wenn kein Fehler aufgetreten
- *         ist, der Student also erfolgreich angelegt wurde.
+ *         ist, das Mitglied also erfolgreich angelegt wurde.
  */
-async function neu(studiObjekt) {
+async function neu(mitgliedObjekt) {
 
-    const matrikelnr = studiObjekt.matrikelnr;
+    const mitgliedID = mitgliedObjekt.mitgliedID;
 
-    if ( !Number.isInteger(matrikelnr) ) {
+    if ( !Number.isInteger(mitgliedID) ) {
 
-        return "Matrikelnummer ist keine ganze Zahl (Integer).";
+        return "MitgliedID ist keine ganze Zahl (Integer).";
     }
 
-    const studiGefunden = getByMatrikelnr(matrikelnr);
-    if (studiGefunden) {
+    const mitgliedGefunden = getByMitglied(mitgliedID);
+    if (mitgliedGefunden) {
 
-        return `Studi mit Matrikelnummer ${matrikelnr} existiert bereits: ` +
-               `${studiGefunden.vorname} ${studiGefunden.nachname}`;
+        return `Mitglied mit MitgliedID ${mitgliedID} existiert bereits: ` +
+               `${mitgliedGefunden.vorname} ${mitgliedGefunden.nachname}`;
     }
 
     // check if studiengang ist existing
     const sgKurz = studiObjekt.studiengang;
 
-    const sgObjekt = buchService.getBybuchID(sgKurz);
-    if (!sgObjekt) {
+    const buchObjekt = buchService.getBybuchID(sgKurz);
+    if (!buchObjekt) {
 
-        return `Studi mit unbekanntem Studiengang "${sgKurz}" kann nicht angelegt werden.`;
+        return `Mitglied mit unbekanntem Buch "${sgKurz}" kann nicht angelegt werden.`;
     }
 
-    // eigentliches Anlegen neuer Studi
-    await datenbankObjekt.studiNeu(studiObjekt);
+    // eigentliches Anlegen neuer Mitglied
+    await datenbankObjekt.mitgliedNeu(mitgliedObjekt);
 
-    logger.info(`Neuer Studi angelegt: ${studiObjekt.matrikelnr} - ` +
-                `${studiObjekt.vorname} ${studiObjekt.nachname} - ${sgKurz}`);
+    logger.info(`Neues Mitglied angelegt: ${mitgliedObjekt.mitgliedID} - ` +
+                `${mitgliedObjekt.vorname} ${mitgliedObjekt.nachname} - ${sgKurz}`);
 
     return "";
 }
 
 
 /**
- * Einzelne Attribute in Studi-Objekt ändern
- * (Matrikelnummer ist Schlüssel und kann daher nicht geändert werden).
+ * Einzelne Attribute in Mitglied-Objekt ändern
+ * (MitgliedID ist Schlüssel und kann daher nicht geändert werden).
  *
- * @param {*} matrikelnr  Matrikelnummer von Studi, für den Änderungen vorgenommen werden sollen.
+ * @param {*} mitgliedID  MitgliedID von Mitglied, für den Änderungen vorgenommen werden sollen.
  *
  * @param {*} deltaObjekt Objekt mit neuen Werten von Attributen, die geändert werden sollen.
  *                        Es muss mindestens ein Attribut enthalten.
