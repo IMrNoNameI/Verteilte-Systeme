@@ -2,7 +2,7 @@ import logging from "logging";
 
 import { API_PREFIX } from "./konstanten.js";
 
-import studiService from "../services/mietglied.services.js";
+import mitgliedService from "../services/mietglied.services.js";
 import { CUSTOM_HEADER_ANZAHL, CUSTOM_HEADER_FEHLER } from "./konstanten.js";
 import { HTTP_STATUS_CODES } from "./konstanten.js";
 
@@ -259,23 +259,23 @@ async function patchResource(req, res) {
     const nachname    = req.body.nachname;
     const adresse     = req.body.adresse;
 
-    const deltaObjekt = {};
+    const mitgliedObjekt = {};
 
     let einAttributGeaendert = false;
     if (vorname && vorname.trim().length > 0 ) {
 
         einAttributGeaendert = true;
-        deltaObjekt.vorname = vorname.trim();
+        mitgliedObjekt.vorname = vorname.trim();
     }
     if (nachname && nachname.trim().length > 0 ) {
 
         einAttributGeaendert = true;
-        deltaObjekt.nachname = nachname.trim();
+        mitgliedObjekt.nachname = nachname.trim();
     }
     if (adresse && adresse.trim().length > 0 ) {
 
         einAttributGeaendert = true;
-        deltaObjekt.adresse = adresse.trim();
+        mitgliedObjekt.adresse = adresse.trim();
     }
     if (einAttributGeaendert === false) {
 
@@ -287,7 +287,7 @@ async function patchResource(req, res) {
     }
 
 
-    const ergebnisObjekt = await mitgliedService.mitgliedAendern(mitgliedIDInt, deltaObjekt);
+    const ergebnisObjekt = await mitgliedService.mitgliedAendern(mitgliedIDInt, mitgliedObjekt);
 
     if (ergebnisObjekt.fehler) {
 

@@ -238,7 +238,7 @@ async function patchResource(req, res) {
     
     const buchID = req.params.buchID;
 
-    // versuche, die matrikelnummer zu parsen
+    // versuche, die buchID zu parsen
     let buchIDInt = parseInt(buchID);
 
     if ( isNaN(buchIDInt) ) {

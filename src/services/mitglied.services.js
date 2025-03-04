@@ -76,13 +76,13 @@ function getByMitgliedID(mitgliedID) {
 
     if (foundMitglied) {
 
-        logger.info(`Studi mit MitgliedID "${mitgliedID}" gefunden: `+
+        logger.info(`Mitglied mit ID "${mitgliedID}" gefunden: `+
                     `${foundMitglied.vorname} ${foundMitglied.nachname}`);
         return foundMitglied;
 
     } else {
 
-        logger.info(`Kein Mitglied mit MitgliedID "${mitgliedID}" gefunden.`);
+        logger.info(`Kein Mitglied mit ID "${mitgliedID}" gefunden.`);
         return null;
     }
 }
@@ -105,27 +105,27 @@ async function neu(mitgliedObjekt) {
         return "MitgliedID ist keine ganze Zahl (Integer).";
     }
 
-    const mitgliedGefunden = getByMitglied(mitgliedID);
+    const mitgliedGefunden = getByMitgliedID(mitgliedID);
     if (mitgliedGefunden) {
 
-        return `Mitglied mit MitgliedID ${mitgliedID} existiert bereits: ` +
+        return `Mitglied mit ID ${mitgliedID} existiert bereits: ` +
                `${mitgliedGefunden.vorname} ${mitgliedGefunden.nachname}`;
     }
 
-    // check if studiengang ist existing
+    // check if studiengang ist existing (kann glaub weg)
     const sgKurz = studiObjekt.studiengang;
 
     const buchObjekt = buchService.getBybuchID(sgKurz);
     if (!buchObjekt) {
 
-        return `Mitglied mit unbekanntem Buch "${sgKurz}" kann nicht angelegt werden.`;
+        return `Mitglied mit unbekannter Adresse "${sgKurz}" kann nicht angelegt werden.`;
     }
 
-    // eigentliches Anlegen neuer Mitglied
+    // eigentliches Anlegen von neuem Mitglied
     await datenbankObjekt.mitgliedNeu(mitgliedObjekt);
 
     logger.info(`Neues Mitglied angelegt: ${mitgliedObjekt.mitgliedID} - ` +
-                `${mitgliedObjekt.vorname} ${mitgliedObjekt.nachname} - ${sgKurz}`);
+                `${mitgliedObjekt.vorname} ${mitgliedObjekt.nachname} - ${mitgliedObjekt.adresse}`);
 
     return "";
 }
@@ -135,24 +135,24 @@ async function neu(mitgliedObjekt) {
  * Einzelne Attribute in Mitglied-Objekt ändern
  * (MitgliedID ist Schlüssel und kann daher nicht geändert werden).
  *
- * @param {*} mitgliedID  MitgliedID von Mitglied, für den Änderungen vorgenommen werden sollen.
+ * @param {*} mitgliedID  MitgliedID von Mitglied, für das Änderungen vorgenommen werden sollen.
  *
- * @param {*} deltaObjekt Objekt mit neuen Werten von Attributen, die geändert werden sollen.
+ * @param {*} mitgliedObjekt Objekt mit neuen Werten von Attributen, die geändert werden sollen.
  *                        Es muss mindestens ein Attribut enthalten.
  *
- * @returns Studi-Objekt mit geänderten Attributen oder Objekt mit `fehler`-Attribut,
+ * @returns Mitglied-Objekt mit geänderten Attributen oder Objekt mit `fehler`-Attribut,
  *          wenn die Änderung nicht erfolgreich war.
  */
-async function aendern(matrikelnr, deltaObjekt) {
+async function mitgliedAendern(mitgliedID, mitgliedObjekt) {
 
-    const studiGefunden = getByMatrikelnr(matrikelnr);
-    if (studiGefunden === false) {
+    const mitgliedGefunden = getByMitgliedID(mitgliedID);
+    if (mitgliedGefunden === false) {
 
-        logger.warn(`Ändern fehlgeschlagen, kein Studi mit Matrikelnummer ${matrikelnr} gefunden.`);
-        return { "fehler": `Kein Studi mit Matrikelnummer ${matrikelnr} gefunden.` };
+        logger.warn(`Ändern fehlgeschlagen, kein Mitglied mit MitgliedID ${mitgliedID} gefunden.`);
+        return { "fehler": `Kein Mitglied mit MitgliedID ${mitgliedID} gefunden.` };
     }
-
-    if (deltaObjekt.studiengang) {
+//wtf is this
+    if (mitgliedObjekt.buch) {
 
         const sgObjekt = buchService.getBybuchID(deltaObjekt.studiengang);
         if (!sgObjekt) {
@@ -177,27 +177,27 @@ async function aendern(matrikelnr, deltaObjekt) {
 
 
 /**
- * Studi anhand von Matrikelnummer löschen. Es wird zuerst geprüft, ob es überhaupt
- * einen Studi mit der als Argument übergebenen Matrikelnummer gibt.
+ * Mitglied anhand von MitgliedID löschen. Es wird zuerst geprüft, ob es überhaupt
+ * ein Mitglied mit der als Argument übergebenen ID gibt.
  *
- * @param {number} matrikelnr Matrikelnummer von Studi, der gelöscht werden soll.
+ * @param {number} mitgliedID MitgliedID von Mitglied, das gelöscht werden soll.
  *
- * @returns {boolean} `true`, wenn Studi gelöscht wurde, sonst `false`(weil kein Studi mit `matrinr`
+ * @returns {boolean} `true`, wenn Mitglied gelöscht wurde, sonst `false`(weil kein Mitglied mit `mitgliedID`
  *                    gefunden wurde).
  */
-async function loeschen(matrikelnr) {
+async function mitgliedLoeschen(mitgliedID) {
 
-    const studiGefunden = getByMatrikelnr(matrikelnr);
-    if (!studiGefunden) {
+    const mitgliedGefunden = getByMitgliedID(mitgliedID);
+    if (!mitgliedGefunden) {
 
-        logger.warn(`Löschen fehlgeschlagen, kein Studi mit Matrikelnummer ${matrikelnr} gefunden.`);
+        logger.warn(`Löschen fehlgeschlagen, kein Mitglied mit ID ${mitgliedID} gefunden.`);
         return false;
     }
 
-    await datenbankObjekt.studiLoeschen(matrikelnr);
+    await datenbankObjekt.mitgliedLoeschen(mitgliedID);
 
-    logger.info(`Studi mit Matrikelnummer ${matrikelnr} gelöscht: `+
-                `${studiGefunden.vorname} ${studiGefunden.nachname} - ${studiGefunden.studiengang}`);
+    logger.info(`Mitglied mit ID ${mitgliedID} gelöscht: `+
+                `${mitgliedGefunden.vorname} ${mitgliedGefunden.nachname} - ${mitgliedGefunden.adresse}`);
 
     return true;
 }
@@ -209,8 +209,8 @@ async function loeschen(matrikelnr) {
 export default {
 
     // Lese-Funktionen
-    getAlle, suche, getByMatrikelnr,
+    getAlle, suche, getByMitgliedID,
 
     // Schreib-Funktionen
-    neu, loeschen, aendern
+    neu, mitgliedLoeschen, aendern
 };
