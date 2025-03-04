@@ -149,27 +149,43 @@ async function buchNeu(buchObjekt) {
  * @return {object} Geändertes Buch-Objekt oder leeres Objekt, wenn kein
  *                  Buch mit der ID gefunden wurde.
  */
-async function buchAendern(buchID, buchObjekt) {
+async function buchAendern(buchID, deltaObjekt) {
 
-    const buch = datenbank.data.buecher.find( (buch) => buch.buchID === buchID );
+    let buchObjekt = null;
+    for (let i=0; i < datenbank.data.buecher.length; i++) {
 
-    if (buch) {
+        if (datenbank.data.buecher[i].buchID === buchID) {
 
-        buch.titel = buchObjekt.titel;
-        buch.autor = buchObjekt.autor;
-        buch.verfuegbar = buchObjekt.verfuegbar;
-        await datenbank.write();
+            buchObjekt = datenbank.data.buecher[i];
+            break;
+        }
+    }
 
-        logger.info(`Werte von Buch "${buchID}" geändert: ${buchObjekt.titel}`);
-
-        return buch;
-
-    } else {
+    if (buchObjekt === null) {
 
         logger.error(`INTERNER FEHLER: Kein Buch mit ID "${buchID}" gefunden.`);
-        return {};
+        return null;
     }
-    
+
+    if (deltaObjekt.titel) {
+
+        buchObjekt.titel = deltaObjekt.titel;
+        logger.info(`Titel von Buch ${buchID} geändert: ${buchObjekt.titel}`);
+    }
+    if (deltaObjekt.autor) {
+
+        buchObjekt.autor = deltaObjekt.autor;
+        logger.info(`Autor von Buch ${buchID} geändert: ${buchObjekt.autor}`);
+    }
+    if (deltaObjekt.verfuegbar) {
+
+        buchObjekt.verfuegbar = deltaObjekt.verfuegbar;
+        logger.info(`Verfügbarkeit von Buch ${buchID} geändert: ${buchObjekt.verfuegbar}`);
+    }
+
+    await datenbank.write();
+
+    return buchObjekt;
 }
 /**
  * Bücher anhand ID löschen.
