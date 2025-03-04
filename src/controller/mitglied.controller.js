@@ -2,7 +2,7 @@ import logging from "logging";
 
 import { API_PREFIX } from "./konstanten.js";
 
-import mitgliedService from "../services/mietglied.services.js";
+import mitgliedService from "../services/mitglied.services.js";
 import { CUSTOM_HEADER_ANZAHL, CUSTOM_HEADER_FEHLER } from "./konstanten.js";
 import { HTTP_STATUS_CODES } from "./konstanten.js";
 
@@ -83,7 +83,7 @@ function getResource(req, res) {
         return;
     }
 
-    const ergebnisObjekt = mitgliedService.getBymitgliedID(mitgliedIDInt);
+    const ergebnisObjekt = mitgliedService.getByMitgliedID(mitgliedIDInt);
 
     if(ergebnisObjekt) {
 

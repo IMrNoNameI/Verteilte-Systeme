@@ -1,9 +1,10 @@
 {
   "buecher": [
     {
-      "buchID": 18700,
-      "titel": "Connie liebt lesen",
-      "autor": "Jules Verne"
+      "buchID": 123456,
+      "titel": "Connie hat Bierschiss",
+      "autor": "Petra D. Waix",
+      "verfuegbar": true
     },
     {
       "buchID": 234567,
@@ -50,18 +51,18 @@
       "lang": "Ludologie"
     }
   ],
-  "studis": [
+  "mitglieder": [
     {
-      "matrikelnr": 123456,
-      "vorname": "Hans",
+      "mitgliedID": 123456,
+      "vorname": "Norbert",
       "nachname": "Wiwi",
-      "studiengang": "BWL"
+      "adresse": "Bergstraße 3"
     },
     {
-      "matrikelnr": 234567,
+      "mitgliedID": 234583,
       "vorname": "Nina",
-      "nachname": "Info",
-      "studiengang": "INFO"
+      "nachname": "Duli",
+      "adresse": "Grünwinkel"
     }
   ]
 }

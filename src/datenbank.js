@@ -54,17 +54,17 @@ const anfangsDaten =  {
        }
     ],
 
-    "studis": [
+    "mitglieder": [
         {
-            "matrikelnr": 123456,
+            "mitgliedID": 123456,
             "vorname": "Hans",
             "nachname": "Wiwi",
-            "studiengang": "BWL"
+            "adresse": "Bergstraße 3"
         },{
-            "matrikelnr": 234567,
+            "mitgliedID": 234583,
             "vorname": "Nina",
-            "nachname": "Info",
-            "studiengang": "INFO"
+            "nachname": "Duli",
+            "adresse": "Grünwinkel"
         }
     ]
 };
@@ -86,7 +86,7 @@ async function initialisieren() {
 
     logger.info(`Datenbank mit Datei "${dbDateiName}" initialisiert.`        );
     logger.info(`Anzahl Studiengänge: ${datenbank.data.studiengaenge.length}`);
-    logger.info(`Anzahl Studierende : ${datenbank.data.studis.length}`       );
+    logger.info(`Anzahl Mitglieder : ${datenbank.data.mitglieder.length}`       );
 }
 
 
@@ -196,9 +196,11 @@ async function buchLoeschen(buchID)  {
  *          MitgliederID; wird nicht `null` oder `undefined` sein.
  */
 function mitgliedGetAlle() {
+    
+    logger.info(`1`);
 
     if (datenbank.data && datenbank.data.mitglieder) {
-
+        logger.info(`2`);
         const sortFkt = (a, b) => a.mitgliedID - b.mitgliedID;
 
         return datenbank.data.mitglieder.sort(sortFkt);
@@ -258,43 +260,43 @@ async function mitgliedLoeschen(mitgliedID)  {
  * @return {object} Geändertes Mitglied-Objekt oder `null`, wenn kein Mitglied
  *                  mit der ID gefunden wurde.
  */
-async function mitgliedAendern(matrikelnr, deltaObjekt) {
+async function mitgliedAendern(mitgliedID, deltaObjekt) {
 
-    let studiObjekt = null;
-    for (let i=0; i < datenbank.data.studis.length; i++) {
+    let mitgliedObjekt = null;
+    for (let i=0; i < datenbank.data.mitglieder.length; i++) {
 
-        if (datenbank.data.studis[i].matrikelnr === matrikelnr) {
+        if (datenbank.data.mitglieder[i].mitgliedID === mitgliedID) {
 
-            studiObjekt = datenbank.data.studis[i];
+            mitgliedObjekt = datenbank.data.mitglieder[i];
             break;
         }
     }
 
-    if (studiObjekt === null) {
+    if (mitgliedObjekt === null) {
 
-        logger.error(`INTERNER FEHLER: Kein Studi mit Matrikelnr "${matrikelnr}" gefunden.`);
+        logger.error(`INTERNER FEHLER: Kein Mitglieder mit ID "${mitgliedID}" gefunden.`);
         return null;
     }
 
     if (deltaObjekt.vorname) {
 
-        studiObjekt.vorname = deltaObjekt.vorname;
-        logger.info(`Vorname von Studi ${matrikelnr} geändert: ${studiObjekt.vorname}`);
+        mitgliedObjekt.vorname = deltaObjekt.vorname;
+        logger.info(`Vorname von Mitglied ${mitgliedID} geändert: ${mitgliedObjekt.vorname}`);
     }
     if (deltaObjekt.nachname) {
 
-        studiObjekt.nachname = deltaObjekt.nachname;
-        logger.info(`Nachname von Studi ${matrikelnr} geändert: ${studiObjekt.nachname}`);
+        mitgliedObjekt.nachname = deltaObjekt.nachname;
+        logger.info(`Nachname von Mitglied ${mitgliedID} geändert: ${mitgliedObjekt.nachname}`);
     }
-    if (deltaObjekt.studiengang) {
+    if (deltaObjekt.adresse) {
 
-        studiObjekt.studiengang = deltaObjekt.studiengang;
-        logger.info(`Studiengang von Studi ${matrikelnr} geändert: ${studiObjekt.studiengang}`);
+        mitgliedObjekt.adresse = deltaObjekt.adresse;
+        logger.info(`Adresse von Mitarbeiter ${mitgliedID} geändert: ${mitgliedObjekt.adresse}`);
     }
 
     await datenbank.write();
 
-    return studiObjekt;
+    return mitgliedObjekt;
 }
 
 
