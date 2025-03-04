@@ -112,15 +112,6 @@ async function neu(mitgliedObjekt) {
                `${mitgliedGefunden.vorname} ${mitgliedGefunden.nachname}`;
     }
 
-    // check if studiengang ist existing (kann glaub weg)
-    const sgKurz = studiObjekt.studiengang;
-
-    const buchObjekt = buchService.getBybuchID(sgKurz);
-    if (!buchObjekt) {
-
-        return `Mitglied mit unbekannter Adresse "${sgKurz}" kann nicht angelegt werden.`;
-    }
-
     // eigentliches Anlegen von neuem Mitglied
     await datenbankObjekt.mitgliedNeu(mitgliedObjekt);
 
@@ -148,26 +139,16 @@ async function mitgliedAendern(mitgliedID, mitgliedObjekt) {
     const mitgliedGefunden = getByMitgliedID(mitgliedID);
     if (mitgliedGefunden === false) {
 
-        logger.warn(`Ändern fehlgeschlagen, kein Mitglied mit MitgliedID ${mitgliedID} gefunden.`);
-        return { "fehler": `Kein Mitglied mit MitgliedID ${mitgliedID} gefunden.` };
-    }
-//wtf is this
-    if (mitgliedObjekt.buch) {
-
-        const sgObjekt = buchService.getBybuchID(deltaObjekt.studiengang);
-        if (!sgObjekt) {
-
-            logger.warn(`Ändern fehlgeschlagen, Studiengang "${deltaObjekt.studiengang}" existiert nicht.`);
-            return { "fehler": `Studiengang "${deltaObjekt.studiengang}" existiert nicht.` };
-        }
+        logger.warn(`Ändern fehlgeschlagen, kein Mitglied mit ID ${mitgliedID} gefunden.`);
+        return { "fehler": `Kein Mitglied mit ID ${mitgliedID} gefunden.` };
     }
 
-    const ergebnisObjekt = await datenbankObjekt.studiAendern(matrikelnr, deltaObjekt);
+    const ergebnisObjekt = await datenbankObjekt.mitgliedAendern(mitgliedID, mitgliedObjekt);
 
     if (ergebnisObjekt === null) {
 
-        logger.warn(`Ändern fehlgeschlagen, kein Studi mit Matrikelnummer ${matrikelnr} gefunden.`);
-        return { "fehler": `Kein Studi mit Matrikelnummer ${matrikelnr} gefunden.` };
+        logger.warn(`Ändern fehlgeschlagen, kein Mitglied mit ID ${mitgliedID} gefunden.`);
+        return { "fehler": `Kein Mitglied mit ID ${mitgliedID} gefunden.` };
 
     } else {
 
@@ -212,5 +193,5 @@ export default {
     getAlle, suche, getByMitgliedID,
 
     // Schreib-Funktionen
-    neu, mitgliedLoeschen, aendern
+    neu, mitgliedLoeschen, mitgliedAendern
 };

@@ -142,7 +142,14 @@ async function langnameAendern(kurzname, langname) {
 
     return sgObj;
 }
+ // check if studiengang ist existing (kann glaub weg)
+    const sgKurz = studiObjekt.studiengang;
 
+    const buchObjekt = buchService.getBybuchID(sgKurz);
+    if (!buchObjekt) {
+
+        return `Mitglied mit unbekannter Adresse "${sgKurz}" kann nicht angelegt werden.`;
+    }
 
 /**
  * Alle Funktionen als Objekt exportieren.

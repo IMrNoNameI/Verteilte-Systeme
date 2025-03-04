@@ -192,16 +192,16 @@ async function buchLoeschen(buchID)  {
 /**
  * Alle Mitglieder von Datenbank holen.
  *
- * @returns Array mit allen Studierenden, sortiert nach aufsteigenden
- *          Matrikelnummer; wird nicht `null` oder `undefined` sein.
+ * @returns Array mit allen Mitgliedern, sortiert nach aufsteigenden
+ *          MitgliederID; wird nicht `null` oder `undefined` sein.
  */
-function studiGetAlle() {
+function mitgliedGetAlle() {
 
-    if (datenbank.data && datenbank.data.studis) {
+    if (datenbank.data && datenbank.data.mitglieder) {
 
-        const sortFkt = (a, b) => a.matrikelnr - b.matrikelnr;
+        const sortFkt = (a, b) => a.mitgliedID - b.mitgliedID;
 
-        return datenbank.data.studis.sort(sortFkt);
+        return datenbank.data.mitglieder.sort(sortFkt);
 
     } else {
 
@@ -211,55 +211,54 @@ function studiGetAlle() {
 
 
 /**
- * Neuen Studierenden anlegen. Es muss sichergestellt sein,
- * dass es nur keinen Studierenden mit der gleichen Matrikelnummer
+ * Neues Mitglied anlegen. Es muss sichergestellt sein,
+ * dass es nur ein Mitglied mit der gleichen ID
  * gibt!
  *
- * @param {*} studiObjekt Objekt mit neuem Studierenden, muss
- *                        die Attribute `matrikelnr`, `vorname`,
- *                        `nachname` und `studiengang` enthalten.
+ * @param {*} mitgliedObjekt Objekt mit neuem Mitglied, muss
+ *                        die Attribute `mitgliedID`, `vorname`,
+ *                        `nachname` und `adresse` enthalten.
  */
-async function studiNeu(studiObjekt) {
+async function mitgliedNeu(mitgliedObjekt) {
 
-    datenbank.data.studis.push(studiObjekt)
+    datenbank.data.mitglieder.push(mitgliedObjekt)
     await datenbank.write();
 
-    logger.info(`Anzahl Studis nach Anlegen neuer Studi: ${datenbank.data.studis.length}`);
+    logger.info(`Anzahl Mitglieder nach Anlegen von neuem Mitglied: ${datenbank.data.mitglieder.length}`);
 }
 
 
 /**
- * Studierenden anhand Matrikelnummer löschen.
+ * Mitglieder anhand ID löschen.
  *
- * @param {*} matrikelnr Matrikelnummer von zu löschemden studi.
+ * @param {*} mitgliedID ID von zu löschenden Mitglied.
  */
-async function studiLoeschen(matrikelnr)  {
+async function mitgliedLoeschen(mitgliedID)  {
 
-    const filterFkt = (studi) => studi.matrikelnr !== matrikelnr;
+    const filterFkt = (mitglied) => mitglied.mitgliedID !== mitgliedID;
 
-    datenbank.data.studis = datenbank.data.studis.filter( filterFkt );
+    datenbank.data.mitglieder = datenbank.data.mitglieder.filter( filterFkt );
 
     await datenbank.write();
 
-    logger.info(`Anzahl Studis nach Löschen: ${datenbank.data.studis.length}`);
+    logger.info(`Anzahl Mitglieder nach Löschen: ${datenbank.data.mitglieder.length}`);
 }
 
 
 /**
- * Ändert ausgewählte Eigenschaften eines Studierenden.
+ * Ändert ausgewählte Eigenschaften eines Mitglieds.
  *
- * @param {number} matrikelnr Matrkelnummer des zu ändernden Studis; es muss
- *                            vorher überprüft werden, dass ein Studi mit
- *                            dieser Matrikelnummer existiert.
+ * @param {number} mitgliedID ID des zu ändernden Mitglieds; es muss
+ *                            vorher überprüft werden, dass ein Mitglied mit
+ *                            dieser ID existiert.
  *
- * @param {*} deltaObjekt Objekt mit neuen Werten für den Studi; die Werte
- *                        müssen schon normalisiert sein und der Studiengang
- *                        (falls enthalten) muss existieren.
+ * @param {*} mitgliedObjekt Objekt mit neuen Werten für das Mitglied; die Werte
+ *                        müssen schon normalisiert sein
  *
- * @return {object} Geändertes Studi-Objekt oder `null`, wenn kein Studi
- *                  mit der Matrikelnummer gefunden wurde.
+ * @return {object} Geändertes Mitglied-Objekt oder `null`, wenn kein Mitglied
+ *                  mit der ID gefunden wurde.
  */
-async function studiAendern(matrikelnr, deltaObjekt) {
+async function mitgliedAendern(matrikelnr, deltaObjekt) {
 
     let studiObjekt = null;
     for (let i=0; i < datenbank.data.studis.length; i++) {
@@ -308,5 +307,5 @@ export default {
 
     buchGetAlle, buchNeu, buchAendern, buchLoeschen,
 
-    studiGetAlle, studiNeu, studiLoeschen, studiAendern
+    mitgliedGetAlle, mitgliedNeu, mitgliedLoeschen, mitgliedAendern
 };

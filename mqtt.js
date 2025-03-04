@@ -11,3 +11,21 @@ function publishBorrowing(bookId, memberId) {
     const message = JSON.stringify({ bookId, memberId, action: 'borrowed' }); // Nachricht als JSON
     client.publish('library/borrow', message); // Nachricht an das MQTT-Topic senden
 }
+
+
+
+
+
+async function buchAendern(buchID, buchObjekt) {
+
+    const buchObj = getBybuchID(buchID);
+    if (!buchObj) {
+
+        logger.error(`Änderung der Werte für unbekanntes Buch "${buchID}" angefordert.`);
+        return null;
+    }
+
+    await datenbankObjekt.buchAendern(buchID, buchObjekt);
+
+    return buchObj;
+}

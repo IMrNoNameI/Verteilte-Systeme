@@ -126,16 +126,24 @@ async function neu(buchObjekt) {
  */
 async function buchAendern(buchID, buchObjekt) {
 
-    const buchObj = getBybuchID(buchID);
-    if (!buchObj) {
+    const buchGefunden = getBybuchID(buchID);
+    if (buchGefunden === false) {
 
-        logger.error(`Änderung der Werte für unbekanntes Buch "${buchID}" angefordert.`);
-        return null;
+        logger.warn(`Ändern fehlgeschlagen, kein Buch mit ID ${buchID} gefunden.`);
+        return { "fehler": `Kein Buch mit ID ${buchID} gefunden.` };
     }
 
-    await datenbankObjekt.buchAendern(buchID, buchObjekt);
+    const ergebnisObjekt = await datenbankObjekt.buchAendern(buchID, buchObjekt);
 
-    return buchObj;
+    if (ergebnisObjekt === null) {
+
+        logger.warn(`Ändern fehlgeschlagen, kein Buch mit ID ${buchID} gefunden.`);
+        return { "fehler": `Kein Buch mit ID ${buchID} gefunden.` };
+
+    } else {
+
+        return ergebnisObjekt;
+    }
 }
 
 /**
