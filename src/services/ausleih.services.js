@@ -171,7 +171,7 @@ async function ausleihLoeschen(ausleihID) {
     return true;
 }
 
- // check if studiengang ist existing (kann glaub weg)
+ // check if studiengang ist existing 
     const sgKurz = studiObjekt.studiengang;
 
     const buchObjekt = buchService.getBybuchID(sgKurz);
