@@ -19,7 +19,7 @@ const anfangsDaten =  {
             "buchID": 234567,
             "titel": "Davids Traum vom großen Klau",
             "autor": "Jules Verne",
-            "verfuegbar": false
+            "verfuegbar": true
         }
     ],
 
@@ -386,7 +386,7 @@ async function ausleihAendern(ausleihID, deltaObjekt) {
     if (deltaObjekt.verliehen) {
 
         ausleihObjekt.verliehen = deltaObjekt.verliehen;
-        logger.info(`Verliehen Status von Ausleih ${ausleihID} geändert: ${ausleihhObjekt.verliehen}`);
+        logger.info(`Verliehen Status von Ausleih ${ausleihID} geändert: ${ausleihObjekt.verliehen}`);
     }
 
     await datenbank.write();

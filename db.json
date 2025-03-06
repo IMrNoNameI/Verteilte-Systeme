@@ -24,7 +24,7 @@
       "ausleihID": 113457,
       "buchID": 234567,
       "mitgliedID": 234583,
-      "verliehen": false
+      "verliehen": true
     }
   ],
   "mitglieder": [

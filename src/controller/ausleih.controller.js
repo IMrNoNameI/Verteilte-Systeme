@@ -76,9 +76,9 @@ export default function routenRegistrieren(app) {
  */
 function getResource(req, res) {
 
-    const ausleihID = req.params.buchID;
+    const ausleihID = req.params.ausleihID;
 
-    // versuche, die buchID zu parsen
+    // versuche, die ausleihID zu parsen
     let ausleihIDInt = parseInt(ausleihID);
 
     if ( isNaN(ausleihIDInt) ) {
@@ -159,7 +159,7 @@ async function postCollection(req, res) {
         return;
     }
 
-    if (buchID === undefined || buchID.trim() === "") {
+    if (buchID === undefined) {
 
         res.setHeader(CUSTOM_HEADER_FEHLER, "Attribut 'buchID' fehlt oder ist leer.");
         res.status( HTTP_STATUS_CODES.BAD_REQUEST_400 );
@@ -167,7 +167,7 @@ async function postCollection(req, res) {
         return;
     }
 
-    if (mitgliedID === undefined || mitgliedID.trim() === "") {
+    if (mitgliedID === undefined) {
 
         res.setHeader(CUSTOM_HEADER_FEHLER, "Attribut 'mitgliedID' fehlt oder ist leer.");
         res.status( HTTP_STATUS_CODES.BAD_REQUEST_400 );
@@ -182,11 +182,44 @@ async function postCollection(req, res) {
         res.json( {} );
         return;
     }
+    
+    let ausleihIDInt = parseInt(ausleihID);
+
+    if ( isNaN(ausleihIDInt) ) {
+
+        logger.error(`Pfadparameterwert "${ausleihID}" konnte nicht nach Int geparst werden.`);
+        res.setHeader(CUSTOM_HEADER_FEHLER, "AusleihID muss eine ganze Zahl (Integer) sein.");
+        res.status(HTTP_STATUS_CODES.BAD_REQUEST_400);
+        res.json( {} );
+        return;
+    }
+
+    let buchIDInt = parseInt(buchID);
+
+    if ( isNaN(buchIDInt) ) {
+
+        logger.error(`Pfadparameterwert "${buchID}" konnte nicht nach Int geparst werden.`);
+        res.setHeader(CUSTOM_HEADER_FEHLER, "AusleihID muss eine ganze Zahl (Integer) sein.");
+        res.status(HTTP_STATUS_CODES.BAD_REQUEST_400);
+        res.json( {} );
+        return;
+    }    
+    
+    let mitgliedIDInt = parseInt(mitgliedID);
+
+    if ( isNaN(mitgliedIDInt) ) {
+
+        logger.error(`Pfadparameterwert "${mitgliedID}" konnte nicht nach Int geparst werden.`);
+        res.setHeader(CUSTOM_HEADER_FEHLER, "AusleihID muss eine ganze Zahl (Integer) sein.");
+        res.status(HTTP_STATUS_CODES.BAD_REQUEST_400);
+        res.json( {} );
+        return;
+    }
 
     // In neues Objekt umwandeln, damit evtl. überflüssige Attribute
     // entfernt werden; außerdem werden die Werte normalisiert.
-    const neuesObjekt = { ausleihID:ausleihID, buchID: buchID.trim(),
-                          mitgliedID: mitgliedID.trim(), verliehen: verliehen};
+    const neuesObjekt = { ausleihID:ausleihIDInt, buchID: buchIDInt,
+                          mitgliedID: mitgliedIDInt, verliehen: verliehen};
 
     const erfolgreich = await ausleihService.neu(neuesObjekt);
     if (erfolgreich === true) {
@@ -269,15 +302,15 @@ async function patchResource(req, res) {
     const deltaObjekt = {};
 
     let einAttributGeaendert = false;
-    if (buchID && buchID.trim().length > 0 ) {
+    if (buchID && buchID.length > 0 ) {
 
         einAttributGeaendert = true;
-        deltaObjekt.buchID = buchID.trim();
+        deltaObjekt.buchID = buchID;
     }
-    if (mitgliedID && mitgliedID.trim().length > 0 ) {
+    if (mitgliedID && mitgliedID.length > 0 ) {
 
         einAttributGeaendert = true;
-        deltaObjekt.mitgliedID = mitgliedID.trim();
+        deltaObjekt.mitgliedID = mitgliedID;
     }
     if (verliehen ) {
 

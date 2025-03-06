@@ -2,7 +2,8 @@
 
 import logging         from "logging";
 import datenbankObjekt from "../datenbank.js";
-
+import buchService from "./buch.services.js";
+import mitgliedService from "./mitglied.services.js";
 
 const logger = logging.default("ausleih-service");
 
