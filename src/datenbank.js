@@ -23,7 +23,7 @@ const anfangsDaten =  {
         }
     ],
 
-    "studiengaenge": [
+"studiengaenge": [
        {
         "kurz": "BWL",
         "lang": "Betriebswirtschaftslehre"
@@ -54,7 +54,7 @@ const anfangsDaten =  {
        }
     ],
 
-    "mitglieder": [
+"mitglieder": [
         {
             "mitgliedID": 123456,
             "vorname": "Hans",
@@ -85,16 +85,17 @@ async function initialisieren() {
     await datenbank.write();
 
     logger.info(`Datenbank mit Datei "${dbDateiName}" initialisiert.`        );
-    logger.info(`Anzahl Studiengänge: ${datenbank.data.studiengaenge.length}`);
-    logger.info(`Anzahl Mitglieder : ${datenbank.data.mitglieder.length}`       );
+    logger.info(`Anzahl Bücher: ${datenbank.data.buecher.length}`);
+    logger.info(`Anzahl Mitglieder: ${datenbank.data.mitglieder.length}`       );
+    logger.info(`Anzahl Ausleihen: ${datenbank.data.ausleihen.length}`);
 }
 
 
 // Namenskonvention: Alle Funktionen für den Zugriff auf die Datenbank
 //                   müssen mit dem Namen des Entitätstyps beginnen,
-//                   also entweder "studiengang..." oder "studi...".
-//                   Erst kommen die Funktionen für die Studiengänge,
-//                   dann die für die Studierenden.
+//                   also entweder "buch..." oder "mitglied...".
+//                   Erst kommen die Funktionen für die Bücher,
+//                   dann die für die Mitglieder.
 
 
 /**
@@ -137,9 +138,9 @@ async function buchNeu(buchObjekt) {
 
 
 /**
- * Neuen Langnamen für einen Studiengang setzen. Die Funktion darf nur aufgerufen
- * werden, wenn vorher sichergestellt wurde, dass es einen Studiengang mit dem
- * Kurznamen gibt.
+ * Neuen Wert für ein Buch setzen. Die Funktion darf nur aufgerufen
+ * werden, wenn vorher sichergestellt wurde, dass es ein Buch mit der
+ * ID gibt.
  *
  * @param {*} buchID ID (Schlüssel) des Buchs, für die das Buchobjekt
  *                     geändert werden soll.
@@ -315,6 +316,115 @@ async function mitgliedAendern(mitgliedID, deltaObjekt) {
     return mitgliedObjekt;
 }
 
+// ****** ab jetzt die Funktionen für die Ausleihen-Datensätze ******
+
+/**
+ * Alle Ausleihen von Datenbank holen.
+ *
+ * @returns Array mit allen Ausleihen;
+ *          sortiert nach aufsteigenden
+ *          AusleihID; wird nicht `null` oder `undefined` sein.
+ */
+function ausleihGetAlle() {
+    
+    logger.info(`1`);
+
+    if (datenbank.data && datenbank.data.ausleihen) {
+        logger.info(`2`);
+        const sortFkt = (a, b) => a.ausleihID - b.ausleihID;
+
+        return datenbank.data.ausleihen.sort(sortFkt);
+
+    } else {
+
+        return [];
+    }
+}
+
+
+/**
+ * Neuer Ausleih anlegen. Es muss sichergestellt sein,
+ * dass es nur einen Ausleih mit der gleichen ID gibt!
+ *
+ * @param {*} ausleihObjekt Objekt mit neuem Ausleih, muss
+    *            die Attribute `ID`, `buchID`, `mitgliedID` und `verliehen` enthalten.
+ */
+async function ausleihNeu(ausleihObjekt) {
+
+    datenbank.data.ausleihen.push(ausleihObjekt)
+    await datenbank.write();
+
+    logger.info(`Anzahl Ausleihen nach Anlegen von neuem Ausleih "${ausleihObjekt.ausleihID}": ` +
+                `${datenbank.data.ausleihen.length}`);
+}
+
+
+/**
+ * Neuen Wert für ein Ausleih setzen. Die Funktion darf nur aufgerufen
+ * werden, wenn vorher sichergestellt wurde, dass es ein Ausleih mit der
+ * ID gibt.
+ *
+ * @param {*} ausleihID ID (Schlüssel) des Ausleihs, für die das Ausleihobjekt
+ *                     geändert werden soll.
+ *
+ * @param {*} ausleihObjekt Neues Ausleihobjekt, dass für den Ausleih gespeichert werden soll.
+ *
+ * @return {object} Geändertes Ausleih-Objekt oder leeres Objekt, wenn kein
+ *                  Ausleih mit der ID gefunden wurde.
+ */
+async function ausleihAendern(ausleihID, deltaObjekt) {
+
+    let ausleihObjekt = null;
+    for (let i=0; i < datenbank.data.ausleihen.length; i++) {
+
+        if (datenbank.data.ausleihen[i].ausleihID === ausleihID) {
+
+            ausleihObjekt = datenbank.data.ausleihen[i];
+            break;
+        }
+    }
+
+    if (ausleihObjekt === null) {
+
+        logger.error(`INTERNER FEHLER: Kein Ausleih mit ID "${ausleihID}" gefunden.`);
+        return null;
+    }
+
+    if (deltaObjekt.buchID) {
+
+        ausleihObjekt.buchID = deltaObjekt.buchID;
+        logger.info(`BuchID von Ausleih ${ausleihID} geändert: ${ausleihObjekt.buchID}`);
+    }
+    if (deltaObjekt.mitgliedID) {
+
+        ausleihObjekt.mitgliedID = deltaObjekt.mitgliedID;
+        logger.info(`MitgliedID von Ausleih ${ausleihID} geändert: ${ausleihObjekt.mitgliedID}`);
+    }
+    if (deltaObjekt.verliehen) {
+
+        ausleihObjekt.verliehen = deltaObjekt.verliehen;
+        logger.info(`Verliehen Status von Ausleih ${ausleihID} geändert: ${ausleihhObjekt.verliehen}`);
+    }
+
+    await datenbank.write();
+
+    return ausleihObjekt;
+}
+/**
+ * Ausleih anhand ID löschen.
+ *
+ * @param {*} ausleihID ID von zu löschenden Ausleih.
+ */
+async function ausleihLoeschen(ausleihID)  {
+
+    const filterFkt = (ausleih) => ausleih.ausleihID !== ausleihID;
+
+    datenbank.data.ausleihen = datenbank.data.ausleihen.filter( filterFkt );
+
+    await datenbank.write();
+
+    logger.info(`Anzahl Ausleihen nach Löschen: ${datenbank.data.ausleihen.length}`);
+}
 
 /**
  * Alle Funktionen mit Default-Objekt exportieren.
@@ -325,5 +435,7 @@ export default {
 
     buchGetAlle, buchNeu, buchAendern, buchLoeschen,
 
-    mitgliedGetAlle, mitgliedNeu, mitgliedLoeschen, mitgliedAendern
+    mitgliedGetAlle, mitgliedNeu, mitgliedLoeschen, mitgliedAendern,
+
+    ausleihGetAlle, ausleihNeu, ausleihAendern, ausleihLoeschen
 };
