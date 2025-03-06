@@ -104,13 +104,30 @@ async function neu(ausleihObjekt) {
         return false;
     }
 
+     // check if Buch ist existing 
+     const buchID = ausleihObjekt.buchID;
+
+     const buchObjekt = buchService.getBybuchID(buchID);
+     if (!buchObjekt) {
+ 
+         return `Buch mit unbekannter ID"${buchID}" kann nicht angelegt werden.`;
+     }
+
+      // check if Mitglied ist existing 
+    const mitgliedID = ausleihObjekt.mitgliedID;
+
+    const mitgliedObjekt = mitgliedService.getByMitgliedID(mitgliedID);
+    if (!mitgliedObjekt) {
+
+        return `Mitglied mit unbekannter ID "${mitgliedID}" kann nicht angelegt werden.`;
+    }
+
     await datenbankObjekt.ausleihNeu(ausleihObjekt);
 
     logger.info(`Neuer Ausleih angelegt: ${ausleihObjekt.ausleihID} `);
 
     return true;
 }
-
 
 /**
  * Wert eines Ausleihs ändern.
@@ -131,7 +148,25 @@ async function ausleihAendern(ausleihID, ausleihObjekt) {
         logger.warn(`Ändern fehlgeschlagen, kein Ausleih mit ID ${ausleihID} gefunden.`);
         return { "fehler": `Kein Ausleih mit ID ${ausleihID} gefunden.` };
     }
+        if (ausleihObjekt.ausleihID){
+         // check if Buch ist existing 
+         const buchID = ausleihObjekt.buchID;
 
+         const buchObjekt = buchService.getBybuchID(buchID);
+         if (!buchObjekt) {
+     
+             return `Buch mit unbekannter ID"${buchID}" kann nicht angelegt werden.`;
+         }
+    
+          // check if Mitglied ist existing 
+        const mitgliedID = ausleihObjekt.mitgliedID;
+    
+        const mitgliedObjekt = mitgliedService.getByMitgliedID(mitgliedID);
+        if (!mitgliedObjekt) {
+    
+            return `Mitglied mit unbekannter ID "${mitgliedID}" kann nicht angelegt werden.`;
+        }
+    }
     const ergebnisObjekt = await datenbankObjekt.ausleihAendern(ausleihID, ausleihObjekt);
 
     if (ergebnisObjekt === null) {

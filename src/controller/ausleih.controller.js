@@ -167,7 +167,7 @@ async function postCollection(req, res) {
         return;
     }
 
-    if (mitgliedID=== undefined || mitgliedID.trim() === "") {
+    if (mitgliedID === undefined || mitgliedID.trim() === "") {
 
         res.setHeader(CUSTOM_HEADER_FEHLER, "Attribut 'mitgliedID' fehlt oder ist leer.");
         res.status( HTTP_STATUS_CODES.BAD_REQUEST_400 );
@@ -189,14 +189,26 @@ async function postCollection(req, res) {
                           mitgliedID: mitgliedID.trim(), verliehen: verliehen};
 
     const erfolgreich = await ausleihService.neu(neuesObjekt);
-    if (erfolgreich) {
+    if (erfolgreich === true) {
 
         res.status( HTTP_STATUS_CODES.CREATED_201 );
         res.json( neuesObjekt );
 
-    } else {
+    } else if (erfolgreich === false){
 
         res.setHeader( CUSTOM_HEADER_FEHLER, "Ausleih mit AusleihID existierte bereits." );
+        res.status( HTTP_STATUS_CODES.CONFLICT_409 );
+        res.json( {} );
+    }
+    else if (erfolgreich.startsWith("Mitglied")){
+
+        res.setHeader( CUSTOM_HEADER_FEHLER, "Mitglied mit MitgliedID existiert nicht." );
+        res.status( HTTP_STATUS_CODES.CONFLICT_409 );
+        res.json( {} );
+    }
+    else if (erfolgreich.startsWith("Buch")){
+
+        res.setHeader( CUSTOM_HEADER_FEHLER, "Buch mit BuchID existiert nicht." );
         res.status( HTTP_STATUS_CODES.CONFLICT_409 );
         res.json( {} );
     }
