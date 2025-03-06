@@ -23,17 +23,17 @@ const anfangsDaten =  {
         }
     ],
 
-"studiengaenge": [
+"ausleihen": [
        {
             "ausleihID": 113456,
             "buchID": 123456,
             "mitgliedID": 123456,
-            "vorhanden": true
+            "verliehen": true
        },{
-            "ausleihID": 113456,
+            "ausleihID": 113457,
             "buchID": 234567,
             "mitgliedID": 234583,
-            "vorhanden": false
+            "verliehen": false
         },
     ],
 
@@ -383,10 +383,10 @@ async function ausleihAendern(ausleihID, deltaObjekt) {
         ausleihObjekt.mitgliedID = deltaObjekt.mitgliedID;
         logger.info(`MitgliedID von Ausleih ${ausleihID} geändert: ${ausleihObjekt.mitgliedID}`);
     }
-    if (deltaObjekt.vorhanden) {
+    if (deltaObjekt.verliehen) {
 
-        ausleihObjekt.vorhanden = deltaObjekt.vorhanden;
-        logger.info(`Vorhanden-Status von Ausleih ${ausleihID} geändert: ${ausleihhObjekt.vorhanden}`);
+        ausleihObjekt.verliehen = deltaObjekt.verliehen;
+        logger.info(`Verliehen Status von Ausleih ${ausleihID} geändert: ${ausleihhObjekt.verliehen}`);
     }
 
     await datenbank.write();

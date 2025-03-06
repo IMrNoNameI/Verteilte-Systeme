@@ -264,7 +264,7 @@ async function patchResource(req, res) {
 
     const buchID     = req.body.buchID;
     const mitgliedID    = req.body.mitgliedID;
-    const vorhanden = req.body.vorhanden;
+    const verliehen = req.body.verliehen;
 
     const deltaObjekt = {};
 
@@ -279,10 +279,10 @@ async function patchResource(req, res) {
         einAttributGeaendert = true;
         deltaObjekt.mitgliedID = mitgliedID.trim();
     }
-    if (vorhanden ) {
+    if (verliehen ) {
 
         einAttributGeaendert = true;
-        deltaObjekt.vorhanden = vorhanden;
+        deltaObjekt.verliehen = verliehen;
     }
     if (einAttributGeaendert === false) {
 

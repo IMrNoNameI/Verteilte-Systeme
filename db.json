@@ -2,8 +2,8 @@
   "buecher": [
     {
       "buchID": 123456,
-      "titel": "Abenteur in der Galaxis",
-      "autor": "Petra Dirkenhauer",
+      "titel": "Connie hat Bierschiss",
+      "autor": "Petra D. Waix",
       "verfuegbar": true
     },
     {
@@ -13,48 +13,24 @@
       "verfuegbar": false
     }
   ],
-  "studiengaenge": [
+  "ausleihen": [
     {
-      "kurz": "BWL",
-      "lang": "Betriebswirtschaftslehre"
+      "ausleihID": 113456,
+      "buchID": 123456,
+      "mitgliedID": 123456,
+      "verliehen": true
     },
     {
-      "kurz": "WING",
-      "lang": "Wirtschaftsingenieurwesen"
-    },
-    {
-      "kurz": "WINF",
-      "lang": "Wirtschaftsinformatik"
-    },
-    {
-      "kurz": "INFO",
-      "lang": "Informatik"
-    },
-    {
-      "kurz": "IWMM",
-      "lang": "Irgendwas mit Medien"
-    },
-    {
-      "kurz": "VWL",
-      "lang": "Volkswirtschaftslehre"
-    },
-    {
-      "kurz": "BW",
-      "lang": "Brauereiwesen"
-    },
-    {
-      "kurz": "WBÖ",
-      "lang": "Weinbau und Önologie"
-    },
-    {
-      "kurz": "LUD",
-      "lang": "Ludologie"
+      "ausleihID": 113457,
+      "buchID": 234567,
+      "mitgliedID": 234583,
+      "verliehen": false
     }
   ],
   "mitglieder": [
     {
       "mitgliedID": 123456,
-      "vorname": "Norbert",
+      "vorname": "Hans",
       "nachname": "Wiwi",
       "adresse": "Bergstraße 3"
     },
