@@ -206,15 +206,6 @@ async function ausleihLoeschen(ausleihID) {
     return true;
 }
 
- // check if studiengang ist existing 
-    const sgKurz = studiObjekt.studiengang;
-
-    const buchObjekt = buchService.getBybuchID(sgKurz);
-    if (!buchObjekt) {
-
-        return `Mitglied mit unbekannter Adresse "${sgKurz}" kann nicht angelegt werden.`;
-    }
-
 /**
  * Alle Funktionen als Objekt exportieren.
  */

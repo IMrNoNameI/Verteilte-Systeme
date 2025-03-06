@@ -25,33 +25,16 @@ const anfangsDaten =  {
 
 "studiengaenge": [
        {
-        "kurz": "BWL",
-        "lang": "Betriebswirtschaftslehre"
+            "ausleihID": 113456,
+            "buchID": 123456,
+            "mitgliedID": 123456,
+            "vorhanden": true
        },{
-        "kurz": "WING",
-        "lang": "Wirtschaftsingenieurwesen"
-       },{
-        "kurz": "WINF",
-        "lang": "Wirtschaftsinformatik"
-       },{
-        "kurz": "INFO",
-        "lang": "Informatik"
-       },{
-        "kurz": "IWMM",
-        "lang": "Irgendwas mit Medien"
-       },{
-        "kurz": "VWL",
-        "lang": "Volkswirtschaftslehre"
-       },{
-        "kurz": "BW",
-        "lang": "Brauereiwesen"
-       },{
-        "kurz": "WBÖ",
-        "lang": "Weinbau und Önologie"
-       },{
-        "kurz": "LUD",
-        "lang": "Ludologie"
-       }
+            "ausleihID": 113456,
+            "buchID": 234567,
+            "mitgliedID": 234583,
+            "vorhanden": false
+        },
     ],
 
 "mitglieder": [
@@ -400,10 +383,10 @@ async function ausleihAendern(ausleihID, deltaObjekt) {
         ausleihObjekt.mitgliedID = deltaObjekt.mitgliedID;
         logger.info(`MitgliedID von Ausleih ${ausleihID} geändert: ${ausleihObjekt.mitgliedID}`);
     }
-    if (deltaObjekt.verliehen) {
+    if (deltaObjekt.vorhanden) {
 
-        ausleihObjekt.verliehen = deltaObjekt.verliehen;
-        logger.info(`Verliehen Status von Ausleih ${ausleihID} geändert: ${ausleihhObjekt.verliehen}`);
+        ausleihObjekt.vorhanden = deltaObjekt.vorhanden;
+        logger.info(`Vorhanden-Status von Ausleih ${ausleihID} geändert: ${ausleihhObjekt.vorhanden}`);
     }
 
     await datenbank.write();
