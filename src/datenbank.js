@@ -12,8 +12,8 @@ const anfangsDaten =  {
 "buecher": [
         {
             "buchID": 123456,
-            "titel": "Connie hat Bierschiss",
-            "autor": "Petra D. Waix",
+            "titel": "Connie hat gute Laune",
+            "autor": "Petra Wickert",
         },{
             "buchID": 234567,
             "titel": "Davids Traum vom großen Klau",

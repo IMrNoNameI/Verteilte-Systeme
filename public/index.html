@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <title>REST-API: Studi-Verwaltung</title>
+    <title>REST-API: Bibliothek-Verwaltung</title>
     <meta charset="utf-8" >
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
 
-    <h1>REST-API: Studi-Verwaltung</h1>
+    <h1>REST-API: Bibliothek-Verwaltung</h1>
 
     <p class="fett">Studiengänge</p>
     <ul>
@@ -17,6 +17,24 @@
         <li><a href="http://localhost:8080/api/v1/sg/?q=wl"   target="_blank">Studiengänge mit "wl" in Kurz/Lang-Name (Suche auf Collection)</a></li>
         <li><a href="http://localhost:8080/api/v1/sg/?q=wein" target="_blank">Studiengänge mit "wein" in Kurz/Lang-Name (Suche auf Collection)</a></li>
         <li><a href="http://localhost:8080/api/v1/sg/?q=xyz"  target="_blank">Studiengänge mit "xyz" in Kurz/Lang-Name (Suche auf Collection)</a></li>
+    </ul>
+
+    <br>
+
+    <p class="fett">Bücher</p>
+    <ul>
+        <li><a href="http://localhost:8080/api/v1/studi/"        target="_blank">Alle Studierende (Collection)</a></li>
+        <li><a href="http://localhost:8080/api/v1/studi/123456"  target="_blank">Studi mit Matrikelnr 123456 (Ressource)</a></li>
+        <li><a href="http://localhost:8080/api/v1/studi/?q=hans" target="_blank">Studis mit "hans" in Vor-/Nachname (Suche auf Collection)</a></li>
+    </ul>
+
+    <br>
+
+    <p class="fett">Mitglieder</p>
+    <ul>
+        <li><a href="http://localhost:8080/api/v1/studi/"        target="_blank">Alle Studierende (Collection)</a></li>
+        <li><a href="http://localhost:8080/api/v1/studi/123456"  target="_blank">Studi mit Matrikelnr 123456 (Ressource)</a></li>
+        <li><a href="http://localhost:8080/api/v1/studi/?q=hans" target="_blank">Studis mit "hans" in Vor-/Nachname (Suche auf Collection)</a></li>
     </ul>
 
     <br>
