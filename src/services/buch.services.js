@@ -167,7 +167,7 @@ async function buchLoeschen(buchID) {
     await datenbankObjekt.buchLoeschen(buchID);
 
     logger.info(`Buch mit ID ${buchID} gelöscht: `+
-                `${buchGefunden.titel} ${buchGefunden.autor} - ${buchGefunden.verfuegbar}`);
+                `${buchGefunden.titel} ${buchGefunden.autor} `);
 
     return true;
 }

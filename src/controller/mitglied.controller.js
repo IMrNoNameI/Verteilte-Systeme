@@ -149,6 +149,18 @@ async function postCollection(req, res) {
         res.json( {} );
         return;
     }
+
+    let mitgliedIDInt = parseInt(mitgliedID);
+
+    if ( isNaN(mitgliedIDInt || mitgliedIDInt < 1) ) {
+
+        logger.error(`Pfadparameterwert "${mitgliedID}" konnte nicht nach Int geparst werden.`);
+        res.setHeader(CUSTOM_HEADER_FEHLER, "MitgliedID muss eine ganze Zahl (Integer) sein.");
+        res.status(HTTP_STATUS_CODES.BAD_REQUEST_400);
+        res.json( {} );
+        return;
+    }
+
     if (vorname === undefined || vorname.trim() === "" ) {
 
         res.setHeader(CUSTOM_HEADER_FEHLER, "Attribut 'vorname' fehlt oder ist leer");

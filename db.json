@@ -1,16 +1,34 @@
 {
   "buecher": [
     {
+      "buchID": 123455,
+      "titel": "Bert am Herd",
+      "autor": "Ernie B. Sesam"
+    },
+    {
+      "buchID": "-175689",
+      "titel": "Bert am Herd",
+      "autor": "Ernie B. Sesam"
+    },
+    {
       "buchID": 123456,
-      "titel": "Connie hat Bierschiss",
-      "autor": "Petra D. Waix",
-      "verfuegbar": true
+      "titel": "Connie hat gute Laune",
+      "autor": "Petra Wickert"
+    },
+    {
+      "buchID": 123454,
+      "titel": "Connie hat gute Laune",
+      "autor": "Petra Wickert"
     },
     {
       "buchID": 234567,
       "titel": "Davids Traum vom großen Klau",
-      "autor": "Jules Verne",
-      "verfuegbar": false
+      "autor": "Jules Verne"
+    },
+    {
+      "buchID": -234567,
+      "titel": "Davids Traum vom großen Klau",
+      "autor": "Jules Verne"
     }
   ],
   "ausleihen": [
@@ -24,7 +42,7 @@
       "ausleihID": 113457,
       "buchID": 234567,
       "mitgliedID": 234583,
-      "verliehen": true
+      "verliehen": false
     }
   ],
   "mitglieder": [

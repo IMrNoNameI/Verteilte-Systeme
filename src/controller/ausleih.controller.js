@@ -159,6 +159,17 @@ async function postCollection(req, res) {
         return;
     }
 
+    let ausleihIDInt = parseInt(ausleihID);
+
+    if ( isNaN(ausleihIDInt || ausleihIDInt < 1 ) ) {
+
+        logger.error(`Pfadparameterwert "${ausleihID}" konnte nicht nach Int geparst werden.`);
+        res.setHeader(CUSTOM_HEADER_FEHLER, "AusleihID muss eine ganze Zahl (Integer) sein.");
+        res.status(HTTP_STATUS_CODES.BAD_REQUEST_400);
+        res.json( {} );
+        return;
+    }
+    
     if (buchID === undefined) {
 
         res.setHeader(CUSTOM_HEADER_FEHLER, "Attribut 'buchID' fehlt oder ist leer.");
@@ -182,21 +193,10 @@ async function postCollection(req, res) {
         res.json( {} );
         return;
     }
-    
-    let ausleihIDInt = parseInt(ausleihID);
-
-    if ( isNaN(ausleihIDInt) ) {
-
-        logger.error(`Pfadparameterwert "${ausleihID}" konnte nicht nach Int geparst werden.`);
-        res.setHeader(CUSTOM_HEADER_FEHLER, "AusleihID muss eine ganze Zahl (Integer) sein.");
-        res.status(HTTP_STATUS_CODES.BAD_REQUEST_400);
-        res.json( {} );
-        return;
-    }
 
     let buchIDInt = parseInt(buchID);
 
-    if ( isNaN(buchIDInt) ) {
+    if ( isNaN(buchIDInt || ausleihIDInt < 1) ) {
 
         logger.error(`Pfadparameterwert "${buchID}" konnte nicht nach Int geparst werden.`);
         res.setHeader(CUSTOM_HEADER_FEHLER, "AusleihID muss eine ganze Zahl (Integer) sein.");
@@ -207,7 +207,7 @@ async function postCollection(req, res) {
     
     let mitgliedIDInt = parseInt(mitgliedID);
 
-    if ( isNaN(mitgliedIDInt) ) {
+    if ( isNaN(mitgliedIDInt || ausleihIDInt < 1) ) {
 
         logger.error(`Pfadparameterwert "${mitgliedID}" konnte nicht nach Int geparst werden.`);
         res.setHeader(CUSTOM_HEADER_FEHLER, "AusleihID muss eine ganze Zahl (Integer) sein.");

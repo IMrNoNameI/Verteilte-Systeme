@@ -149,12 +149,22 @@ async function postCollection(req, res) {
     const buchID = req.body.buchID;
     const titel = req.body.titel;
     const autor = req.body.autor;
-    const verfuegbar = req.body.verfuegbar;
-
+    
     if (buchID === undefined || buchID === "") {
 
         res.setHeader(CUSTOM_HEADER_FEHLER, "Attribut 'buchID' fehlt oder ist leer.");
         res.status( HTTP_STATUS_CODES.BAD_REQUEST_400 );
+        res.json( {} );
+        return;
+    }
+
+    let buchIDInt = parseInt(buchID);
+
+    if ( isNaN(buchIDInt) || buchIDInt < 1 ) {
+
+        logger.error(`Pfadparameterwert "${buchID}" konnte nicht nach Int geparst werden.`);
+        res.setHeader(CUSTOM_HEADER_FEHLER, "BuchID muss eine ganze positive Zahl (Integer) sein.");
+        res.status(HTTP_STATUS_CODES.BAD_REQUEST_400);
         res.json( {} );
         return;
     }
@@ -175,18 +185,11 @@ async function postCollection(req, res) {
         return;
     }
 
-    if (verfuegbar === undefined ) {
-
-        res.setHeader(CUSTOM_HEADER_FEHLER, "Attribut 'verfuegbar' fehlt oder ist leer.");
-        res.status( HTTP_STATUS_CODES.BAD_REQUEST_400 );
-        res.json( {} );
-        return;
-    }
 
     // In neues Objekt umwandeln, damit evtl. überflüssige Attribute
     // entfernt werden; außerdem werden die Werte normalisiert.
-    const neuesObjekt = { buchID:buchID, titel: titel.trim(),
-                          autor: autor.trim(), verfuegbar: verfuegbar};
+    const neuesObjekt = { buchID:buchIDInt, titel: titel.trim(),
+                          autor: autor.trim() };
 
     const erfolgreich = await buchService.neu(neuesObjekt);
     if (erfolgreich) {
@@ -252,7 +255,6 @@ async function patchResource(req, res) {
 
     const titel     = req.body.titel;
     const autor    = req.body.autor;
-    const verfuegbar = req.body.verfuegbar;
 
     const deltaObjekt = {};
 
@@ -266,11 +268,6 @@ async function patchResource(req, res) {
 
         einAttributGeaendert = true;
         deltaObjekt.autor = autor.trim();
-    }
-    if (verfuegbar ) {
-
-        einAttributGeaendert = true;
-        deltaObjekt.verfuegbar = verfuegbar;
     }
     if (einAttributGeaendert === false) {
 

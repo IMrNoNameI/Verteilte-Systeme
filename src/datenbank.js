@@ -14,12 +14,10 @@ const anfangsDaten =  {
             "buchID": 123456,
             "titel": "Connie hat Bierschiss",
             "autor": "Petra D. Waix",
-            "verfuegbar": true
         },{
             "buchID": 234567,
             "titel": "Davids Traum vom großen Klau",
             "autor": "Jules Verne",
-            "verfuegbar": true
         }
     ],
 
@@ -160,11 +158,6 @@ async function buchAendern(buchID, deltaObjekt) {
 
         buchObjekt.autor = deltaObjekt.autor;
         logger.info(`Autor von Buch ${buchID} geändert: ${buchObjekt.autor}`);
-    }
-    if (deltaObjekt.verfuegbar) {
-
-        buchObjekt.verfuegbar = deltaObjekt.verfuegbar;
-        logger.info(`Verfügbarkeit von Buch ${buchID} geändert: ${buchObjekt.verfuegbar}`);
     }
 
     await datenbank.write();
