@@ -40,5 +40,5 @@ Buch:
 Ausleih:
 Enthält Fremdschlüssel zu Mitglied und Buch → Verknüpft Bücher und Mitglieder.
 
-## 📜 Lizenz
+## Lizenz
 Die Bibliotheksverwaltung API steht unter der MIT License zur freien Nutzung zur Verfügung.
