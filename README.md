@@ -21,15 +21,15 @@ Die API stellt verschiedene Endpunkte für Bücher, Mitglieder und Ausleihen ber
 
 ## Datenmodell
 Das System basiert auf drei Hauptentitäten:
-- Bücher: Enthält Informationen zu Titel, Autor und Verfügbarkeit.
-- Mitglieder: Speichert Daten wie Name, E-Mail und Mitgliedschaftsstatus.
-- Ausleihen: Verknüpft Bücher mit Mitgliedern und speichert Informationen zur Leihfrist.
+- Bücher: Enthält Informationen zu Titel und Autor.
+- Mitglieder: Speichert Daten wie Vorname, Nachname und Adresse.
+- Ausleihen: Verknüpft Bücher mit Mitgliedern und gibt Information über Verliehen-Status.
 
 ## Diagramm
 Dieses Diagramm zeigt die Beziehungen zwischen den Entitäten und erleichtert das Verständnis der Datenbankstruktur.
 ![ER-Modell](Bibliotheksverwaltung.drawio.png)
 
-Wie auf dem Diagramm zu sehen gibt es nun folgende Beziehungen zwischen den Entitäten:
+Wie auf dem Diagramm zu sehen, gibt es nun folgende Beziehungen zwischen den Entitäten:
 
 Mitglied:
 1:N Beziehung zu Ausleih → "Ein Mitglied kann mehrere Ausleihen haben."
