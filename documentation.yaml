@@ -1,0 +1,441 @@
+openapi: 3.0.0
+info:
+  title: Bibliotheksverwaltung API
+  description: REST-API für die Verwaltung von Büchern und Mitgliedern
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080/api/v1
+
+tags:
+  - name: Buch
+    description: Endpunkte zur Verwaltung von Büchern
+  - name: Mitglied
+    description: Endpunkte zur Verwaltung von Mitgliedern
+  - name: Ausleih
+    description: Endpunkte zur Verwaltung von Ausleihen
+
+paths:
+  /buch:
+    get:
+      tags:
+        - Buch
+      summary: Alle Bücher abrufen
+      description: Gibt eine Liste aller gespeicherten Bücher zurück.
+      parameters:
+        - name: q
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Erfolgreiche Antwort mit einer Liste von Büchern.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Buch"
+        "204":
+          description: Es wurden keine Bücher gefunden.
+
+    post:
+      tags:
+        - Buch
+      summary: Neues Buch hinzufügen
+      description: Erstellt ein neues Buch und fügt es zu den anderen hinzu.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Buch"
+      responses:
+        "201":
+          description: Buch erfolgreich erstellt.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Buch"
+        "400":
+          description: BuchID muss eine ganze positive Zahl sein oder Attribute fehlen/sind leer.
+       
+        "409":
+          description: Das Buch mit der eingegeben BuchID existiert bereits.
+
+  /buch/{id}:
+    get:
+      tags:
+        - Buch
+      summary: Ein Buch anhand der ID abrufen
+      description: Abrufen eines Buchs anhand der ID
+      parameters:
+        - name: buchID
+          in: path
+          required: true
+          description: Die ID des Buchs
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Erfolgreiches Erhalten des Buchs mit der angegebenen ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Buch'
+        '400':
+          description: Ungültige Anfrage, da BuchID eine ganze positive Zahl sein muss.
+        '404':
+          description: Das Buch mit der angegebenen ID wurde nicht gefunden
+
+    delete:
+      tags:
+        - Buch
+      summary: Buch löschen
+      description: Entfernt ein Buch anhand seiner ID.
+      parameters:
+        - name: buchID
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Buch erfolgreich gelöscht.
+        "400":
+          description: Ungültige Anfrage, da BuchID eine ganze positive Zahl sein muss.
+        "404":
+          description: Das Buch mit der angegebenen ID wurde nicht gefunden.
+    
+    patch:
+      tags:
+        - Buch
+      summary: Aktualisiere ein spezifisches Buch
+      parameters:
+        - name: buchID
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                mitgliedID:
+                  type: integer
+                titel:
+                  type: string
+                autor:
+                  type: string
+                
+      responses:
+        "200":
+          description: Aktualisierung erfolgreich
+        "400":
+          description: Ungültige Anfrage, da BuchID eine ganze positive Zahl sein muss oder mindestens ein neues Attribut im Body.
+        "404":
+          description: Das Buch mit der angegebenen ID wurde nicht gefunden.
+
+  /mitglied:
+    get:
+      tags:
+        - Mitglied
+      summary: Alle Mitglieder abrufen
+      description: Gibt eine Liste aller gespeicherten Mitglieder zurück.
+      parameters:
+        - name: q
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Erfolgreiche Antwort mit einer Liste von Mitgliedern.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Mitglied"
+        "204":
+          description: Es wurden keine Mitglieder gefunden.
+
+    post:
+      tags:
+        - Mitglied
+      summary: Neues Mitglied hinzufügen
+      description: Erstellt ein neues Mitglied und fügt es zur Sammlung hinzu.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Mitglied"
+      responses:
+        "201":
+          description: Mitglied erfolgreich erstellt.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Mitglied"
+        "400":
+          description: MitgliedID muss eine ganze positive Zahl sein oder Attribute fehlen/sind leer.
+       
+        "409":
+          description: Das Mitglied mit der eingegeben MitgliedID existiert bereits.
+
+  /mitglied/{id}:
+    get:
+     tags:
+        - Mitglied
+    summary: Ein Mitglied anhand der ID abrufen
+    description: Abrufen eines Mitglieds anhand der ID
+    parameters:
+        - name: mitgliedID
+          in: path
+          required: true
+          description: Die ID des Mitglieds
+          schema:
+            type: integer
+    responses:
+        '200':
+          description: Erfolgreiches Erhalten des Mitglieds mit der angegebenen ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mitglied'
+        '400':
+          description: Ungültige Anfrage, da MitgliedID eine ganze positive Zahl sein muss.
+        '404':
+          description: Das Mitglied mit der angegebenen ID wurde nicht gefunden.
+
+    delete:
+      tags:
+        - Mitglied
+      summary: Mitglied löschen
+      description: Entfernt ein Mitglied anhand seiner ID.
+      parameters:
+        - name: mitgliedID
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Mitglied erfolgreich gelöscht.
+        "400":
+          description: Ungültige Anfrage, da MitgliedID eine ganze positive Zahl sein muss.
+        "404":
+          description: Das Mitglied mit der angegebenen ID wurde nicht gefunden.
+    
+    patch:
+      tags:
+        - Mitglied
+      summary: Aktualisiere ein spezifisches Mitglied
+      parameters:
+        - name: mitgliedID
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                mitgliedID:
+                  type: integer
+                vorname:
+                  type: string
+                nachname:
+                  type: string
+                adresse:
+                  type: string
+      responses:
+        "200":
+          description: Aktualisierung erfolgreich
+        "400":
+          description: Ungültige Anfrage, da MitgliedID eine ganze positive Zahl sein muss oder mindestens ein neues Attribut im Body.
+        "404":
+          description: Das Mitglied mit der angegebenen ID wurde nicht gefunden.
+
+  /ausleih:
+    get:
+      tags:
+        - Ausleih
+      summary: Alle Ausleihen abrufen
+      description: Gibt eine Liste aller gespeicherten Ausleihen zurück.
+      parameters:
+        - name: q
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Erfolgreiche Antwort mit einer Liste von Ausleihen.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Ausleih"
+        "204":
+          description: Es wurden keine Ausleihen gefunden.
+
+    post:
+      tags:
+        - Ausleih
+      summary: Neuen Ausleih hinzufügen
+      description: Erstellt einen neuen Ausleih und fügt ihn zu den anderen hinzu.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Ausleih"
+      responses:
+        "201":
+          description: Ausleih erfolgreich erstellt.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ausleih"
+        "400":
+          description: AusleihID muss eine ganze positive Zahl sein oder Attribute fehlen/sind leer.
+       
+        "409":
+          description: Der Ausleih, das Buch oder das Mitglied mit der eingegeben ID existiert bereits.
+          
+  /ausleih/{id}:
+    get:
+      tags:
+        - Ausleih
+      summary: Ein Ausleih anhand der ID abrufen
+      description: Abrufen eines Ausleihs anhand der ID
+      parameters:
+        - name: ausleihID
+          in: path
+          required: true
+          description: Die ID des Ausleihs
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Erfolgreiches Erhalten des Ausleihs mit der angegebenen ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ausleih'
+        '400':
+          description: Ungültige Anfrage, da AusleihID eine ganze positive Zahl sein muss.
+        '404':
+          description: Der Ausleih mit der angegebenen ID wurde nicht gefunden
+
+    delete:
+      tags:
+        - Ausleih
+      summary: Ausleih löschen
+      description: Entfernt ein Ausleih anhand seiner ID.
+      parameters:
+        - name: ausleihID
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Ausleih erfolgreich gelöscht.
+        "400":
+          description: Ungültige Anfrage, da AusleihID eine ganze positive Zahl sein muss.
+        "404":
+          description: Der Ausleih mit der angegebenen ID wurde nicht gefunden.
+    
+    patch:
+      tags:
+        - Ausleih
+      summary: Aktualisiere einen spezifischen Ausleih
+      parameters:
+        - name: ausleihID
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ausleihID:
+                  type: integer
+                buchID:
+                  type: integer
+                mitgliedID:
+                  type: integer
+                verliehen:
+                  type: boolean
+                
+      responses:
+        "200":
+          description: Aktualisierung erfolgreich
+        "400":
+          description: Ungültige Anfrage, da AusleihID eine ganze positive Zahl sein muss oder mindestens ein neues Attribut im Body.
+        "404":
+          description: Der Ausleih mit der angegebenen ID wurde nicht gefunden.
+
+components:
+  schemas:
+    Buch:
+      type: object
+      properties:
+        buchID:
+          type: integer
+          format: Id
+          description: Eindeutige ID des Buches
+        titel:
+          type: string
+          description: Titel des Buches
+        autor:
+          type: string
+          description: Autor des Buches
+
+    Mitglied:
+      type: object
+      properties:
+        mitgliedID:
+          type: integer
+          format: Id
+          description: Eindeutige ID des Mitglieds
+        vorname:
+          type: string
+          description: Vorname des Mitglieds
+        nachname:
+          type: string
+          description: Nachname des Mitglieds
+        adresse:
+          type: string
+          description: Adresse des Mitglieds
+          
+    Ausleih:
+      type: object
+      properties:
+        ausleihID:
+          type: integer
+          format: Id
+          description: Eindeutige ID des Ausleihs
+        buchID:
+          type: integer
+          format: Id
+          description: Eindeutige ID des Buchs
+        mitgliedID:
+          type: integer
+          format: Id
+          description: Eindeutige ID des Mitglieds
+        verliehen:
+          type: boolean
+        

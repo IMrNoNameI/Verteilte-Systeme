@@ -84,7 +84,7 @@ function getResource(req, res) {
     if ( isNaN(buchIDInt) ) {
 
         logger.error(`Pfadparameterwert "${buchID}" konnte nicht nach Int geparst werden.`);
-        res.setHeader(CUSTOM_HEADER_FEHLER, "BuchID muss eine ganze Zahl (Integer) sein.");
+        res.setHeader(CUSTOM_HEADER_FEHLER, "BuchID muss eine ganze positive Zahl (Integer) sein.");
         res.status(HTTP_STATUS_CODES.BAD_REQUEST_400);
         res.json( {} );
         return;
@@ -129,7 +129,7 @@ function getCollection(req, res) {
 
     if (anzahl === 0) {
 
-        res.status(HTTP_STATUS_CODES.NOT_FOUND_404);
+        res.status(HTTP_STATUS_CODES.NO_CONTENT_204);
         res.json( [] );
 
     } else {
@@ -215,7 +215,7 @@ async function deleteResource(req, res) {
     if ( isNaN(buchIDInt) ) {
 
         logger.error(`Pfadparameterwert "${buchID}" konnte nicht nach Int geparst werden.`);
-        res.setHeader(CUSTOM_HEADER_FEHLER, "BuchID muss eine ganze Zahl (Integer) sein.");
+        res.setHeader(CUSTOM_HEADER_FEHLER, "BuchID muss eine ganze positive Zahl (Integer) sein.");
         res.status(HTTP_STATUS_CODES.BAD_REQUEST_400);
         res.json( {} );
         return;
@@ -247,7 +247,7 @@ async function patchResource(req, res) {
     if ( isNaN(buchIDInt) ) {
 
         logger.error(`Pfadparameterwert "${buchID}" konnte nicht nach Int geparst werden.`);
-        res.setHeader(CUSTOM_HEADER_FEHLER, "BuchID muss eine ganze Zahl (Integer) sein.");
+        res.setHeader(CUSTOM_HEADER_FEHLER, "BuchID muss eine ganze positive Zahl (Integer) sein.");
         res.status(HTTP_STATUS_CODES.BAD_REQUEST_400);
         res.json( {} );
         return;

@@ -72,7 +72,7 @@ export default function routenRegistrieren(app) {
 
 /**
  * Funktion für HTTP-GET-Request auf die Ressource
- * (Suche einen Studiengang nach BuchID als Pfadparameter).
+ * (Suche einen Studiengang nach AusleihID als Pfadparameter).
  */
 function getResource(req, res) {
 
@@ -84,7 +84,7 @@ function getResource(req, res) {
     if ( isNaN(ausleihIDInt) ) {
 
         logger.error(`Pfadparameterwert "${ausleihID}" konnte nicht nach Int geparst werden.`);
-        res.setHeader(CUSTOM_HEADER_FEHLER, "AusleihID muss eine ganze Zahl (Integer) sein.");
+        res.setHeader(CUSTOM_HEADER_FEHLER, "AusleihID muss eine ganze positive Zahl (Integer) sein.");
         res.status(HTTP_STATUS_CODES.BAD_REQUEST_400);
         res.json( {} );
         return;
@@ -129,7 +129,7 @@ function getCollection(req, res) {
 
     if (anzahl === 0) {
 
-        res.status(HTTP_STATUS_CODES.NOT_FOUND_404);
+        res.status(HTTP_STATUS_CODES.NO_CONTENT_204);
         res.json( [] );
 
     } else {
@@ -164,7 +164,7 @@ async function postCollection(req, res) {
     if ( isNaN(ausleihIDInt || ausleihIDInt < 1 ) ) {
 
         logger.error(`Pfadparameterwert "${ausleihID}" konnte nicht nach Int geparst werden.`);
-        res.setHeader(CUSTOM_HEADER_FEHLER, "AusleihID muss eine ganze Zahl (Integer) sein.");
+        res.setHeader(CUSTOM_HEADER_FEHLER, "AusleihID muss eine ganze positive Zahl (Integer) sein.");
         res.status(HTTP_STATUS_CODES.BAD_REQUEST_400);
         res.json( {} );
         return;
@@ -199,7 +199,7 @@ async function postCollection(req, res) {
     if ( isNaN(buchIDInt || ausleihIDInt < 1) ) {
 
         logger.error(`Pfadparameterwert "${buchID}" konnte nicht nach Int geparst werden.`);
-        res.setHeader(CUSTOM_HEADER_FEHLER, "AusleihID muss eine ganze Zahl (Integer) sein.");
+        res.setHeader(CUSTOM_HEADER_FEHLER, "AusleihID muss eine ganze positive Zahl (Integer) sein.");
         res.status(HTTP_STATUS_CODES.BAD_REQUEST_400);
         res.json( {} );
         return;
@@ -210,7 +210,7 @@ async function postCollection(req, res) {
     if ( isNaN(mitgliedIDInt || ausleihIDInt < 1) ) {
 
         logger.error(`Pfadparameterwert "${mitgliedID}" konnte nicht nach Int geparst werden.`);
-        res.setHeader(CUSTOM_HEADER_FEHLER, "AusleihID muss eine ganze Zahl (Integer) sein.");
+        res.setHeader(CUSTOM_HEADER_FEHLER, "AusleihID muss eine ganze positive Zahl (Integer) sein.");
         res.status(HTTP_STATUS_CODES.BAD_REQUEST_400);
         res.json( {} );
         return;
@@ -257,7 +257,7 @@ async function deleteResource(req, res) {
     if ( isNaN(ausleihIDInt) ) {
 
         logger.error(`Pfadparameterwert "${ausleihID}" konnte nicht nach Int geparst werden.`);
-        res.setHeader(CUSTOM_HEADER_FEHLER, "AusleihID muss eine ganze Zahl (Integer) sein.");
+        res.setHeader(CUSTOM_HEADER_FEHLER, "AusleihID muss eine ganze positive Zahl (Integer) sein.");
         res.status(HTTP_STATUS_CODES.BAD_REQUEST_400);
         res.json( {} );
         return;
@@ -289,7 +289,7 @@ async function patchResource(req, res) {
     if ( isNaN(ausleihIDInt) ) {
 
         logger.error(`Pfadparameterwert "${ausleihID}" konnte nicht nach Int geparst werden.`);
-        res.setHeader(CUSTOM_HEADER_FEHLER, "AusleihID muss eine ganze Zahl (Integer) sein.");
+        res.setHeader(CUSTOM_HEADER_FEHLER, "AusleihID muss eine ganze positive Zahl (Integer) sein.");
         res.status(HTTP_STATUS_CODES.BAD_REQUEST_400);
         res.json( {} );
         return;

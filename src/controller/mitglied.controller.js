@@ -77,7 +77,7 @@ function getResource(req, res) {
     if ( isNaN(mitgliedIDInt) ) {
 
         logger.error(`Pfadparameterwert "${mitgliedID}" konnte nicht nach Int geparst werden.`);
-        res.setHeader(CUSTOM_HEADER_FEHLER, "MitgliedID muss eine Zahl sein.");
+        res.setHeader(CUSTOM_HEADER_FEHLER, "MitgliedID muss eine ganze positive Zahl sein.");
         res.status(HTTP_STATUS_CODES.BAD_REQUEST_400);
         res.json({});
         return;
@@ -122,7 +122,7 @@ function getCollection(req, res) {
 
     if (anzahl === 0) {
 
-        res.status(HTTP_STATUS_CODES.NOT_FOUND_404);
+        res.status(HTTP_STATUS_CODES.NO_CONTENT_204);
         res.json( [] );
 
     } else {
@@ -144,7 +144,7 @@ async function postCollection(req, res) {
 
     if (mitgliedID === undefined) {
 
-        res.setHeader(CUSTOM_HEADER_FEHLER, "Attribut 'mitgliedID' fehlt.");
+        res.setHeader(CUSTOM_HEADER_FEHLER, "Attribut 'mitgliedID' fehlt oder sit leer.");
         res.status( HTTP_STATUS_CODES.BAD_REQUEST_400 );
         res.json( {} );
         return;
@@ -155,7 +155,7 @@ async function postCollection(req, res) {
     if ( isNaN(mitgliedIDInt || mitgliedIDInt < 1) ) {
 
         logger.error(`Pfadparameterwert "${mitgliedID}" konnte nicht nach Int geparst werden.`);
-        res.setHeader(CUSTOM_HEADER_FEHLER, "MitgliedID muss eine ganze Zahl (Integer) sein.");
+        res.setHeader(CUSTOM_HEADER_FEHLER, "MitgliedID muss eine ganze positive Zahl (Integer) sein.");
         res.status(HTTP_STATUS_CODES.BAD_REQUEST_400);
         res.json( {} );
         return;
@@ -202,10 +202,10 @@ async function postCollection(req, res) {
 
     } else {
 
-        res.setHeader(CUSTOM_HEADER_FEHLER, fehlerMeldung);
-        res.status( HTTP_STATUS_CODES.BAD_REQUEST_400 );
+        res.setHeader(CUSTOM_HEADER_FEHLER, "Mitglied mit MitgliedID existiert bereits.");
+        res.status( HTTP_STATUS_CODES.CONFLICT_409 );
         res.json( {} );
-    }
+    }    
 }
 
 
@@ -222,7 +222,7 @@ async function deleteResource(req, res) {
     if ( isNaN(mitgliedIDInt) ) {
 
         logger.error(`Pfadparameterwert "${mitgliedID}" konnte nicht nach Int geparst werden.`);
-        res.setHeader(CUSTOM_HEADER_FEHLER, "MitgliedID muss eine ganze Zahl (Integer) sein.");
+        res.setHeader(CUSTOM_HEADER_FEHLER, "MitgliedID muss eine ganze positive Zahl (Integer) sein.");
         res.status(HTTP_STATUS_CODES.BAD_REQUEST_400);
         res.json( {} );
         return;
@@ -261,7 +261,7 @@ async function patchResource(req, res) {
     if ( isNaN(mitgliedIDInt) ) {
 
         logger.error(`Pfadparameterwert "${mitgliedID}" konnte nicht nach Int geparst werden.`);
-        res.setHeader(CUSTOM_HEADER_FEHLER, "MitgliedID muss eine ganze Zahl (Integer) sein.");
+        res.setHeader(CUSTOM_HEADER_FEHLER, "MitgliedID muss eine ganze positive Zahl (Integer) sein.");
         res.status(HTTP_STATUS_CODES.BAD_REQUEST_400);
         res.json( {} );
         return;
