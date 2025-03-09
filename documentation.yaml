@@ -188,20 +188,20 @@ paths:
 
   /mitglied/{id}:
     get:
-     tags:
+      tags:
         - Mitglied
-    summary: Ein Mitglied anhand der ID abrufen
-    description: Abrufen eines Mitglieds anhand der ID
-    parameters:
+      summary: Ein Mitglied anhand der ID abrufen
+      description: Abrufen eines Mitglieds anhand der ID
+      parameters:
         - name: mitgliedID
           in: path
           required: true
           description: Die ID des Mitglieds
           schema:
             type: integer
-    responses:
+      responses:
         '200':
-          description: Erfolgreiches Erhalten des Mitglieds mit der angegebenen ID.
+          description: Erfolgreiches Erhalten des Mitglieds mit der angegebenen ID
           content:
             application/json:
               schema:
@@ -209,7 +209,7 @@ paths:
         '400':
           description: Ungültige Anfrage, da MitgliedID eine ganze positive Zahl sein muss.
         '404':
-          description: Das Mitglied mit der angegebenen ID wurde nicht gefunden.
+          description: Das Mitglied mit der angegebenen ID wurde nicht gefunden
 
     delete:
       tags:

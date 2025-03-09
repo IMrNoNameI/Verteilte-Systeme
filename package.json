@@ -10,6 +10,7 @@
     "express": "^4.21.2",
     "logging": "^3.3.0",
     "lowdb": "^7.0.1",
+    "mqtt": "^5.10.4",
     "swagger-ui-express": "^5.0.1",
     "uuid": "^11.1.0",
     "yamljs": "^0.3.0"
