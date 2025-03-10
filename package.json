@@ -1,8 +1,8 @@
 {
-  "name": "studiverwaltung",
+  "name": "bibliothekverwaltung",
   "version": "1.0.0",
-  "description": "REST-API Verwaltung von Studierenden",
-  "author": "MDecker-MobileComputing",
+  "description": "REST-API Verwaltung einer Bibliothek",
+  "author": "Julian Abel",
   "type": "module",
   "dependencies": {
     "body-parser": "^1.20.3",

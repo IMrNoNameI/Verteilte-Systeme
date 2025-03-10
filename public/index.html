@@ -10,40 +10,34 @@
 
     <h1>REST-API: Bibliothek-Verwaltung</h1>
 
-    <p class="fett">Studiengänge</p>
-    <ul>
-        <li><a href="http://localhost:8080/api/v1/sg/"        target="_blank">Alle Studiengänge (Collection)</a></li>
-        <li><a href="http://localhost:8080/api/v1/sg/VWL"     target="_blank">Studiengang mit Kurzname "VWL" (Ressource)</a></li>
-        <li><a href="http://localhost:8080/api/v1/sg/?q=wl"   target="_blank">Studiengänge mit "wl" in Kurz/Lang-Name (Suche auf Collection)</a></li>
-        <li><a href="http://localhost:8080/api/v1/sg/?q=wein" target="_blank">Studiengänge mit "wein" in Kurz/Lang-Name (Suche auf Collection)</a></li>
-        <li><a href="http://localhost:8080/api/v1/sg/?q=xyz"  target="_blank">Studiengänge mit "xyz" in Kurz/Lang-Name (Suche auf Collection)</a></li>
-    </ul>
-
-    <br>
-
     <p class="fett">Bücher</p>
     <ul>
-        <li><a href="http://localhost:8080/api/v1/studi/"        target="_blank">Alle Studierende (Collection)</a></li>
-        <li><a href="http://localhost:8080/api/v1/studi/123456"  target="_blank">Studi mit Matrikelnr 123456 (Ressource)</a></li>
-        <li><a href="http://localhost:8080/api/v1/studi/?q=hans" target="_blank">Studis mit "hans" in Vor-/Nachname (Suche auf Collection)</a></li>
+        <li><a href="http://localhost:8080/api/v1/buch/"        target="_blank">Alle Bücher (Collection)</a></li>
+        <li><a href="http://localhost:8080/api/v1/buch/123456"  target="_blank">Buch mit BuchID 123456 (Ressource)</a></li>
+        <li><a href="http://localhost:8080/api/v1/buch/?q=petra" target="_blank">Buch mit "petra" in Autor (Suche auf Collection)</a></li>
+        <li><a href="http://localhost:8080/api/v1/buch/?q=connie" target="_blank">Buch mit "connie" in Titel (Suche auf Collection)</a></li>
     </ul>
 
     <br>
 
     <p class="fett">Mitglieder</p>
     <ul>
-        <li><a href="http://localhost:8080/api/v1/studi/"        target="_blank">Alle Studierende (Collection)</a></li>
-        <li><a href="http://localhost:8080/api/v1/studi/123456"  target="_blank">Studi mit Matrikelnr 123456 (Ressource)</a></li>
-        <li><a href="http://localhost:8080/api/v1/studi/?q=hans" target="_blank">Studis mit "hans" in Vor-/Nachname (Suche auf Collection)</a></li>
+        <li><a href="http://localhost:8080/api/v1/mitglied/"        target="_blank">Alle Mitglieder (Collection)</a></li>
+        <li><a href="http://localhost:8080/api/v1/mitglied/123456"  target="_blank">Mitglied mit MitgliedID 123456 (Ressource)</a></li>
+        <li><a href="http://localhost:8080/api/v1/mitglied/?q=peter" target="_blank">Mitglied mit "hans" in Vorname (Suche auf Collection)</a></li>
+        <li><a href="http://localhost:8080/api/v1/mitglied/?q=wiwi" target="_blank">Mitglied mit "wiwi" in Nachname (Suche auf Collection)</a></li>
+        <li><a href="http://localhost:8080/api/v1/mitglied/?q=bergstraße" target="_blank">Mitglied mit "bergstraße" in Adresse (Suche auf Collection)</a></li>
     </ul>
 
     <br>
 
-    <p class="fett">Studierende</p>
+    <p class="fett">Ausleih</p>
     <ul>
-        <li><a href="http://localhost:8080/api/v1/studi/"        target="_blank">Alle Studierende (Collection)</a></li>
-        <li><a href="http://localhost:8080/api/v1/studi/123456"  target="_blank">Studi mit Matrikelnr 123456 (Ressource)</a></li>
-        <li><a href="http://localhost:8080/api/v1/studi/?q=hans" target="_blank">Studis mit "hans" in Vor-/Nachname (Suche auf Collection)</a></li>
+        <li><a href="http://localhost:8080/api/v1/ausleih/"        target="_blank">Alle Ausleihen (Collection)</a></li>
+        <li><a href="http://localhost:8080/api/v1/ausleih/113456"  target="_blank">Ausleih mit AusleihID 113456 (Ressource)</a></li>
+        <li><a href="http://localhost:8080/api/v1/ausleih/123456"  target="_blank">Ausleih mit BuchID 123456 (Ressource)</a></li>
+        <li><a href="http://localhost:8080/api/v1/ausleih/234583"  target="_blank">Ausleih mit MitgliedID 234583 (Ressource)</a></li>
+        <li><a href="http://localhost:8080/api/v1/ausleih/true" target="_blank">Ausleih mit "true" in verliehen (Suche auf Collection)</a></li>
     </ul>
 
 </body>
